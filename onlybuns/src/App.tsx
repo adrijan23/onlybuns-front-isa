@@ -7,6 +7,8 @@ import MapView from './components/MapComponent/MapView';
 import Chat from './components/ChatComponent/Chat';
 import Profile from './components/ProfileComponent/Profile';
 import BlogPost from './components/BlogPostComponent/BlogPost';
+import Login from './components/AuthComponents/Login';
+import Signup from './components/AuthComponents/Signup';
 
 const App = () => {
   return (
@@ -19,6 +21,8 @@ const App = () => {
         <Route path="/chat" element={<Chat />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/blogpost" element={<BlogPost />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </Router>
   );
