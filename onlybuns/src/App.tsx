@@ -1,26 +1,27 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './components/HomePageComponent/HomePage';
+import Feed from './components/FeedComponent/Feed';
+import Trends from './components/TrendsComponent/Trends';
+import MapView from './components/MapComponent/MapView';
+import Chat from './components/ChatComponent/Chat';
+import Profile from './components/ProfileComponent/Profile';
+import BlogPost from './components/BlogPostComponent/BlogPost';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/feed" element={<Feed />} />
+        <Route path="/trends" element={<Trends />} />
+        <Route path="/map" element={<MapView />} />
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/blogpost" element={<BlogPost />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
