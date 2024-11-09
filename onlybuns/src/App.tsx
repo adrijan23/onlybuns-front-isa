@@ -7,6 +7,7 @@ import MapView from './components/MapComponent/MapView';
 import Chat from './components/ChatComponent/Chat';
 import Profile from './components/ProfileComponent/Profile';
 import BlogPost from './components/BlogPostComponent/BlogPost';
+import Post from './components/PostComponent/Post';
 
 const App = () => {
   return (
@@ -19,6 +20,9 @@ const App = () => {
         <Route path="/chat" element={<Chat />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/blogpost" element={<BlogPost />} />
+        <Route path="/post" element={<Post authorName="John Doe"
+          authorProfileImage="https://via.placeholder.com/40"
+          postImage="https://via.placeholder.com/600" />} />
       </Routes>
     </Router>
   );
