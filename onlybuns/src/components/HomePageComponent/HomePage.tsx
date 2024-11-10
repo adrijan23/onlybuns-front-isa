@@ -13,6 +13,7 @@ const HomePage = () => {
         <Link to="/chat" className="link">Čet između korisnika</Link>
         <Link to="/profile" className="link">Profil korisnika</Link>
         <Link to="/login" className="link">Login</Link>
+        <Link to="/post" className="link">Post korisnika</Link>
       </nav>
     </div>
   );
