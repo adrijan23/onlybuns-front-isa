@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import './Profile.css';
+import styles from './Profile.module.css';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -33,43 +33,43 @@ const Profile: React.FC = () => {
   }
 
   return (
-    <div className="profile-page-container">
+    <div className={styles['profile-page-container']}>
       {/* Profile Section */}
-      <div className="profile-info">
-        <div className="profile-left">
-          <img src={profileImage} alt='Profile' className='profile-image' />
-          <span className='profile-username'>{username}</span>
+      <div className={styles['profile-info']}>
+        <div className={styles['profile-left']}>
+          <img src={profileImage} alt='Profile' className={styles['profile-image']} />
+          <span className={styles['profile-username']}>{username}</span>
         </div>
-        <div className='profile-right'>
-          <div className='profile-stats'>
-            <div className='profile-stat-item'>
-              <span className='profile-stat-count'>{postsCount}</span>
-              <span className='profile-stat-label'>Posts</span>
+        <div className={styles['profile-right']}>
+          <div className={styles['profile-stats']}>
+            <div className={styles['profile-stat-item']}>
+              <span className={styles['profile-stat-count']}>{postsCount}</span>
+              <span className={styles['profile-stat-label']}>Posts</span>
+            </div>
+            <div className={styles['profile-stat-item']}>
+              <span className={styles['profile-stat-count']}>{followersCount}</span>
+              <span className={styles['profile-stat-label']}>Followers</span>
             </div>
             <div className='profile-stat-item'>
-              <span className='profile-stat-count'>{followersCount}</span>
-              <span className='profile-stat-label'>Followers</span>
-            </div>
-            <div className='profile-stat-item'>
-              <span className='profile-stat-count'>{followingCount}</span>
-              <span className='profile-stat-label'>Following</span>
+              <span className={styles['profile-stat-count']}>{followingCount}</span>
+              <span className={styles['profile-stat-label']}>Following</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* User Posts Section */}
-      <div className="profile-posts-grid">
+      <div className={styles['profile-posts-grid']}>
         {userPosts.map((post) => (
           <div
             key={post.id}
-            className="profile-post-container"
+            className={styles['profile-post-container']}
             onClick={() => handlePostClick(post.id)}
           >
-            <img src={post.imageUrl} alt={`Post ${post.id}`} className="profile-post-thumbnail" />
-            <div className="profile-post-info">
-              <span className="profile-post-likes">{post.likes} Likes</span>
-              <span className="profile-post-comments">{post.comments} Comments</span>
+            <img src={post.imageUrl} alt={`Post ${post.id}`} className={styles['profile-post-thumbnail']} />
+            <div className={styles['profile-post-info']}>
+              <span className={styles['profile-post-likes']}>{post.likes} Likes</span>
+              <span className={styles['profile-post-comments']}>{post.comments} Comments</span>
             </div>
           </div>
         ))}

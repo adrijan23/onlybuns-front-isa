@@ -7,7 +7,7 @@ import MapView from './components/MapComponent/MapView';
 import Chat from './components/ChatComponent/Chat';
 import Profile from './components/ProfileComponent/Profile';
 import BlogPost from './components/BlogPostComponent/BlogPost';
-import Login from './components/AuthComponents/Login';
+import Login from './components/LoginComponent/Login';
 import Post from './components/PostComponent/Post';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';

@@ -6,9 +6,10 @@
   
   .nav {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 10px;
     margin-top: 20px;
+    justify-content: center;
   }
   
   .link {
