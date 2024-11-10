@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useContext,useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
 import L from 'leaflet';
-import axios from 'axios';
+import axios from '../../config/axiosConfig'
 import './CreatePost.css';
 import 'leaflet/dist/leaflet.css';
+import { AuthContext } from '../../context/AuthContext';
 
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -25,10 +26,13 @@ L.Marker.prototype.options.icon = DefaultIcon;
 const CreatePost: React.FC = () => {
   const [description, setDescription] = useState('');
   const [address, setAddress] = useState('');
-  const [userId, setUserId] = useState();
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+   const authContext = useContext(AuthContext);
+  if (!authContext) throw new Error('AuthContext is undefined!');
+  const { auth } = authContext;
+
 
   // Function to get address from coordinates using a reverse geocoding API
   const getAddressFromCoordinates = async (lat: number, lng: number) => {
@@ -69,7 +73,7 @@ const LocationMarker = () => {
     const postRequest = {
       description,
       address,
-      userId: 1, // Assuming userId is hardcoded; replace as needed
+      userId: auth.user?.id,
       latitude: coordinates?.lat || null,
       longitude: coordinates?.lng || null,
     };
@@ -85,12 +89,7 @@ const LocationMarker = () => {
   
     try {
       // Send the request to the server
-      const response = await axios.post('http://localhost:8082/api/posts', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': 'Bearer TOKEN',
-        },
-      });
+      const response = await axios.post('/api/posts', formData)
       console.log('Post created:', response.data);
     } catch (error) {
       console.error('Error creating post:', error);

@@ -8,7 +8,6 @@ import Chat from './components/ChatComponent/Chat';
 import Profile from './components/ProfileComponent/Profile';
 import CreatePost from './components/CreatePostComponent/CreatePost';
 import Navbar from './components/NavbarComponent/Navbar';
-import BlogPost from './components/BlogPostComponent/BlogPost';
 import Login from './components/AuthComponents/Login';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -53,10 +52,10 @@ const App = () => {
                     }
                 />
                 <Route
-                    path="/blogpost"
+                    path="/createpost"
                     element={
                         <ProtectedRoute>
-                            <BlogPost/>
+                            <CreatePost/>
                         </ProtectedRoute>
                     }
                 />
