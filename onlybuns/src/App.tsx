@@ -22,7 +22,9 @@ const App = () => {
         <Route path="/blogpost" element={<BlogPost />} />
         <Route path="/post" element={<Post authorName="John Doe"
           authorProfileImage="https://via.placeholder.com/40"
-          postImage="https://via.placeholder.com/600" />} />
+          postImage="https://via.placeholder.com/600"
+          description="The description of the post. Aaaaaaaaaaaaaaaaaaaaaaaaaa fenjafn jaefjaef eajkf ae jkf af."
+          likesCount={0} />} />
       </Routes>
     </Router>
   );

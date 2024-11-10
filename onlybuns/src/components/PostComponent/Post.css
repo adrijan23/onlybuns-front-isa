@@ -19,7 +19,7 @@
 }
 
 /* Top Bar */
-.top-bar {
+.post-top-bar {
     display: flex;
     justify-content: space-between;
     padding: 10px;
@@ -27,12 +27,12 @@
 }
 
 /* Author Information */
-.author-info {
+.post-author-info {
     display: flex;
     align-items: center;
 }
 
-.profile-image {
+.post-profile-image {
     width: 40px;
     height: 40px;
     border-radius: 50%;
@@ -41,15 +41,47 @@
     margin-right: 10px;
 }
 
-.author-name {
+.post-author-name {
     font-size: 16px;
     font-weight: bold;
 }
 
 /* 3-dots Menu Icon */
-.menu-icon {
+.post-menu {
+    position: relative;
+}
+
+.post-menu-icon {
     font-size: 20px;
     cursor: pointer;
+}
+
+.post-menu-dropdown {
+    position: absolute;
+    right: 0;
+    top: 30px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    width: 100px;
+}
+
+.post-menu-item {
+    display: block;
+    padding: 10px;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    background-color: white;
+    border: none;
+    outline: none;
+    font-size: 14px;
+}
+
+.post-menu-item:hover {
+    background-color: #f0f0f0;
 }
 
 /* Post Image */
@@ -61,37 +93,57 @@
     /* Ensures the image scales to 600x600 without distortion */
 }
 
+.post-likes-description {
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+.post-likes-count {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.post-post-description {
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.post-post-description .author-name {
+    font-weight: bold;
+}
+
 /* Bottom Bar */
-.bottom-bar {
+.post-bottom-bar {
     display: flex;
     justify-content: flex-end;
     padding: 10px;
 }
 
-.bottom-icons {
+.post-bottom-icons {
     display: flex;
     align-items: center;
 }
 
-.icon {
+.post-icon {
     font-size: 24px;
     margin-left: 15px;
     cursor: pointer;
 }
 
 /* Comment Section */
-.comment-section {
+.post-comment-section {
     padding: 10px;
     border-top: 1px solid #eee;
 }
 
-.comment-list {
+.post-comment-list {
     list-style: none;
     padding: 0;
     margin: 10px 0;
 }
 
-.comment-item {
+.post-comment-item {
     padding: 8px 0;
     border-bottom: 1px solid #eee;
     font-size: 14px;
@@ -99,13 +151,17 @@
     /*if too long it wraps to the next line*/
 }
 
+.post-comment-username {
+    font-weight: bold;
+}
+
 /* Comment Input */
-.comment-input-container {
+.post-comment-input-container {
     display: flex;
     align-items: center;
 }
 
-.comment-input {
+.post-comment-input {
     flex: 1;
     padding: 8px;
     border-radius: 20px;
@@ -113,7 +169,7 @@
     font-size: 14px;
 }
 
-.add-comment-button {
+.post-add-comment-button {
     margin-left: 10px;
     padding: 8px 15px;
     border: none;
@@ -123,6 +179,6 @@
     cursor: pointer;
 }
 
-.add-comment-button:hover {
+.post-add-comment-button:hover {
     background-color: #0056b3;
 }
