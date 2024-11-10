@@ -8,7 +8,7 @@ import Chat from './components/ChatComponent/Chat';
 import Profile from './components/ProfileComponent/Profile';
 import CreatePost from './components/CreatePostComponent/CreatePost';
 import Navbar from './components/NavbarComponent/Navbar';
-import Login from './components/AuthComponents/Login';
+import Login from './components/LoginComponent/Login';
 import Post from './components/PostComponent/Post';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';

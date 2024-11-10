@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import './auth.css';
+import styles from'./Login.module.css';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -27,7 +27,7 @@ const Login: React.FC = () => {
     };
 
     return (
-        <div className='container'>
+        <div className={styles.container}>
             <h2>Login</h2>
             <form onSubmit={handleLogin}>
                 <div>
@@ -46,8 +46,8 @@ const Login: React.FC = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                {error && <p>{error}</p>}
-                <button type="submit">Login</button>
+                {error && <p className={styles.error}>{error}</p>}
+                <button className={styles.button} type="submit">Login</button>
             </form>
         </div>
     );

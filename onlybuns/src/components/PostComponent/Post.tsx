@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaEllipsisH, FaHeart, FaComment } from 'react-icons/fa';
-import './Post.css';
+import styles from './Post.module.css';
 import axios from '../../config/axiosConfig';
 
 interface Comment {
@@ -73,64 +73,64 @@ const Post = () => {
     };
 
     return (
-        <div className="post-container">
+        <div className={styles['post-container']}>
             {/* Top Bar */}
-            <div className="post-top-bar">
-                <div className="post-author-info">
+            <div className={styles['post-top-bar']}>
+                <div className={styles['post-author-info']}>
                     {/* <img src={post?.us} alt="author" className="post-profile-image" /> */}
-                    <span className="post-author-name">{post?.user.username}</span>
+                    <span className={styles['post-author-name']}>{post?.user.username}</span>
                 </div>
-                <div className='post-menu'>
-                    <FaEllipsisH className="post-menu-icon" onClick={() => setShowMenu(!showMenu)} />
+                <div className={styles['post-menu']}>
+                    <FaEllipsisH className={styles['post-menu-icon']} onClick={() => setShowMenu(!showMenu)} />
                     {showMenu && (
-                        <div className='post-menu-dropdown'>
-                            <button onClick={editPost} className='post-menu-item'>Edit</button>
-                            <button onClick={deletePost} className='post-menu-item'>Delete</button>
+                        <div className={styles['post-menu-dropdown']}>
+                            <button onClick={editPost} className={styles['post-menu-item']}>Edit</button>
+                            <button onClick={deletePost} className={styles['post-menu-item']}>Delete</button>
                         </div>
                     )}
                 </div>
             </div>
 
             {/* Post Image */}
-            <img src={post?.imagePath} alt="post" className="post-image" />
+            <img src={post?.imagePath} alt="post" className={styles['post-image']} />
 
             {/* Bottom Bar */}
-            <div className="post-bottom-bar">
-                <div className="post-bottom-icons">
-                    <FaHeart className="post-icon" />
-                    <FaComment className="post-icon" onClick={() => setShowComments(!showComments)} />
+            <div className={styles['post-bottom-bar']}>
+                <div className={styles['post-bottom-icons']}>
+                    <FaHeart className={styles['post-icon']} />
+                    <FaComment className={styles['post-icon']} onClick={() => setShowComments(!showComments)} />
                 </div>
             </div>
 
             {/* Likes and Description */}
-            <div className='post-likes-description'>
+            <div className={styles['post-likes-description']}>
                 {/* <span className='post-likes-count'>{post?.likesCount} likes</span> */}
-                <p className='post-description'>
-                    <span className='post-author-name'>{post?.user.username}: </span>
+                <p className={styles['post-description']}>
+                    <span className={styles['post-author-name']}>{post?.user.username}: </span>
                     {post?.description}
                 </p>
             </div>
 
             {/* Comment Section */}
             {showComments && (
-                <div className='post-comment-section'>
-                    <ul className='post-comment-list'>
+                <div className={styles['post-comment-section']}>
+                    <ul className={styles['post-comment-list']}>
                         {comments.map((comment, index) => (
-                            <li key={index} className='post-comment-item'>
-                                <span className='post-comment-username'>{comment.username}: </span>
-                                <span className='post-comment-text'>{comment.text}</span>
+                            <li key={index} className={styles['post-comment-item']}>
+                                <span className={styles['post-comment-username']}>{comment.username}: </span>
+                                <span className={styles['post-comment-text']}>{comment.text}</span>
                             </li>
                         ))}
                     </ul>
-                    <div className='post-comment-input-container'>
+                    <div className={styles['post-comment-input-container']}>
                         <input
                             type='text'
                             placeholder='Add a comment...'
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
-                            className='post-comment-input'
+                            className={styles['post-comment-input']}
                         />
-                        <button onClick={addComment} className='post-add-comment-button'>
+                        <button onClick={addComment} className={styles['post-add-comment-button']}>
                             Add
                         </button>
                     </div>

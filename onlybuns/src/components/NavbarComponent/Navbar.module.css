@@ -1,19 +1,17 @@
-/* HomePage.css */
-.container {
-    text-align: center;
-    padding: 20px;
-  }
-  
-  .nav {
+.navbar {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #333;
+    padding: 15px;
+    color: white;
   }
+
   
   .link {
     text-decoration: none;
     padding: 10px;
+    margin: 0px 10px 0px 10px;
     background-color: #007bff;
     color: white;
     border-radius: 5px;
@@ -24,4 +22,3 @@
   .link:hover {
     background-color: #0056b3;
   }
-  
