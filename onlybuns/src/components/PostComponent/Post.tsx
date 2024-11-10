@@ -1,27 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaEllipsisH, FaHeart, FaComment } from 'react-icons/fa';
 import './Post.css';
+import axios from '../../config/axiosConfig';
 
 interface Comment {
     username: string;
     text: string;
 }
 
-interface PostProps {
-    authorName: string;
-    authorProfileImage: string;
-    postImage: string;
-    description: string;
-    likesCount: number;
+interface User {
+    id: number;
+    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    enabled: boolean;
+    lastPasswordResetDate: number;
+    roles: Role[];
 }
 
-const Post: React.FC<PostProps> = (props) => {
+interface Role {
+    name: string;
+}
+
+interface Post {
+    imagePath: string; // Corresponds to the "imagePath" in the JSON
+    description: string;
+    address: string;
+    latitude: number;
+    longitude: number;
+    createdAt: Date;
+    user: User; // To link the user object as per the JSON
+}
+
+const Post = () => {
     const [comments, setComments] = useState<Comment[]>([
         { username: 'Alice', text: 'Great post!' },
         { username: 'Bob', text: 'Amazing content! This is a longer comment to test line wrapping.' }]);
     const [showComments, setShowComments] = useState<boolean>(false);
     const [newComment, setNewComment] = useState<string>('');
     const [showMenu, setShowMenu] = useState<boolean>(false);
+    const [post, setPost] = useState<Post | null>(null); // Post is initially null
+
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const response = await axios.get<Post>('/api/posts/id/1');
+                setPost(response.data);
+            } catch (error) {
+                console.error('Error fetching post:', error);
+            }
+        };
+
+        fetchPost();
+    }, []);
 
     const addComment = () => {
         if (newComment.trim()) {
@@ -45,8 +77,8 @@ const Post: React.FC<PostProps> = (props) => {
             {/* Top Bar */}
             <div className="post-top-bar">
                 <div className="post-author-info">
-                    <img src={props.authorProfileImage} alt="author" className="post-profile-image" />
-                    <span className="post-author-name">{props.authorName}</span>
+                    {/* <img src={post?.us} alt="author" className="post-profile-image" /> */}
+                    <span className="post-author-name">{post?.user.username}</span>
                 </div>
                 <div className='post-menu'>
                     <FaEllipsisH className="post-menu-icon" onClick={() => setShowMenu(!showMenu)} />
@@ -60,7 +92,7 @@ const Post: React.FC<PostProps> = (props) => {
             </div>
 
             {/* Post Image */}
-            <img src={props.postImage} alt="post" className="post-image" />
+            <img src={post?.imagePath} alt="post" className="post-image" />
 
             {/* Bottom Bar */}
             <div className="post-bottom-bar">
@@ -72,10 +104,10 @@ const Post: React.FC<PostProps> = (props) => {
 
             {/* Likes and Description */}
             <div className='post-likes-description'>
-                <span className='post-likes-count'>{props.likesCount} likes</span>
+                {/* <span className='post-likes-count'>{post?.likesCount} likes</span> */}
                 <p className='post-description'>
-                    <span className='post-author-name'>{props.authorName}: </span>
-                    {props.description}
+                    <span className='post-author-name'>{post?.user.username}: </span>
+                    {post?.description}
                 </p>
             </div>
 

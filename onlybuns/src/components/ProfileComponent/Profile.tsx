@@ -1,9 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './Profile.css';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
 
 const Profile: React.FC = () => {
-  const username = 'john_doe';
+
+  const authContext = useContext(AuthContext);
+
+  if (!authContext) throw new Error("AuthContext is undefined!");
+
+  const { auth } = authContext;
+
+  const username = auth.user?.username;
   const profileImage = 'https://via.placeholder.com/150';
   const postsCount = 34;
   const followersCount = 150;
