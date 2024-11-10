@@ -12,6 +12,7 @@ const HomePage = () => {
         <Link to="/map" className="link">Obližnje objave na mapi</Link>
         <Link to="/chat" className="link">Čet između korisnika</Link>
         <Link to="/profile" className="link">Profil korisnika</Link>
+        <Link to="/login" className="link">Login</Link>
       </nav>
     </div>
   );
