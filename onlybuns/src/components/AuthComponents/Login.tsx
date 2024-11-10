@@ -1,64 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './auth.css';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from '../../config/axiosConfig';
 
 const Login: React.FC = () => {
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string | null>(null); // New error message state
-  const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState<string | null>(null);
+    const authContext = useContext(AuthContext);
+    const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+    if (!authContext) throw new Error("AuthContext is undefined!");
 
-    try {
-      const response = await axios.post('/auth/login', { username, password });
+    const { login } = authContext;
 
-      if (response.status === 200) {
-        const { accessToken, expiresIn } = response.data;
-        const expirationTime = new Date().getTime() + expiresIn;
-        localStorage.setItem('accessToken', accessToken);
-        localStorage.setItem('tokenExpiration', expirationTime.toString());
-        setErrorMessage(null); // Clear any previous error message
-        navigate('/');
-      } else {
-        throw new Error('Login failed');
-      }
-    } catch (error) {
-      console.error('Error logging in:', error);
-      setErrorMessage('Login failed. Please check your credentials and try again.');
-    }
-  };
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setError(null);
 
-  return (
-    <div className="container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+        try {
+            await login(username, password);
+            navigate('/profile');
+        } catch (err) {
+            setError('Invalid username or password');
+        }
+    };
+
+    return (
+        <div className='container'>
+            <h2>Login</h2>
+            <form onSubmit={handleLogin}>
+                <div>
+                    <label>Username:</label>
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </div>
+                <div>
+                    <label>Password:</label>
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </div>
+                {error && <p>{error}</p>}
+                <button type="submit">Login</button>
+            </form>
         </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {errorMessage && <p className="error-message">{errorMessage}</p>} {/* Display error message */}
-        <p>Don't have an account yet? <Link to="/signup">Sign Up.</Link></p>
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  );
+    );
 };
 
 export default Login;

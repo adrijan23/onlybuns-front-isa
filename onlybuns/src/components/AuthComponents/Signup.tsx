@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './auth.css';
+import axios from 'axios'
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState<string>('');
