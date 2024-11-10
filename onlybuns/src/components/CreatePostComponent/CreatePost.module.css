@@ -7,18 +7,18 @@
     margin-top: 15px;
   }
   
-  textarea {
+  .create-post textarea {
     width: 100%;
     height: 80px;
     margin-bottom: 10px;
   }
   
-  input {
+  .create-post input {
     width: 100%;
     margin-bottom: 10px;
   }
   
-  button {
+  .create-post button {
     padding: 10px;
     background-color: #007bff;
     color: white;
@@ -26,7 +26,7 @@
     cursor: pointer;
   }
   
-  button:hover {
+  .create-post button:hover {
     background-color: #0056b3;
   }
   

@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
 import L from 'leaflet';
 import axios from '../../config/axiosConfig'
-import './CreatePost.css';
+import styles from './CreatePost.module.css';
 import 'leaflet/dist/leaflet.css';
 import { AuthContext } from '../../context/AuthContext';
 
@@ -97,7 +97,7 @@ const LocationMarker = () => {
   };
   
   return (
-    <div className="create-post">
+    <div className={styles['create-post']}>
       <h2>Create Post</h2>
       <form>
         <label>Description:</label>
@@ -113,7 +113,7 @@ const LocationMarker = () => {
 
         {/* Image Preview Section */}
         {imagePreview && (
-          <div className="image-preview">
+          <div className={styles['image-preview']}>
             <img src={imagePreview} alt="Preview" style={{ width: '200px', height: 'auto', marginTop: '10px' }} />
           </div>
         )}
@@ -121,7 +121,7 @@ const LocationMarker = () => {
         <label>Location:</label>
         <input type="text" value={address} placeholder="Selected address" readOnly />
 
-        <div className="map-container">
+        <div className={styles['map-container']}>
           <MapContainer center={[51.505, -0.09]} zoom={13} style={{ height: '300px', width: '100%' }}>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

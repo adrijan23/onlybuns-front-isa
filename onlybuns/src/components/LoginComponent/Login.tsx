@@ -46,8 +46,8 @@ const Login: React.FC = () => {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </div>
-                {error && <p>{error}</p>}
-                <button type="submit">Login</button>
+                {error && <p className={styles.error}>{error}</p>}
+                <button className={styles.button} type="submit">Login</button>
             </form>
         </div>
     );
