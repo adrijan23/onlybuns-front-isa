@@ -12,6 +12,8 @@ import Login from './components/LoginComponent/Login';
 import Post from './components/PostComponent/Post';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import Signup from './components/SignupComponent/Signup';
+import ActivateAccount from './components/ActivateAccount';
 
 const App = () => {
   return (
@@ -20,6 +22,8 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/activate" element={<ActivateAccount />} />
                 <Route
                     path="/feed"
                     element={
