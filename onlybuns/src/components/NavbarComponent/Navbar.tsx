@@ -21,10 +21,9 @@ const Navbar = () => {
             <Link to="/trends" className={styles.link}>Trends</Link>
             <Link to="/map" className={styles.link}>Posts near you</Link>
             <Link to="/chat" className={styles.link}>Chat</Link>
-            <Link to="/post" className={styles.link}>Post</Link>
             <Link to="/createpost" className={styles.link}>Create Post</Link>
             <Link to="/admin/users" className={styles.link}>Users</Link>
-            
+
             {/* Logout button */}
             <button className={styles.link} onClick={logout}>Logout</button>
           </>

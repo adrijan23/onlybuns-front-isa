@@ -235,14 +235,18 @@ const Post = () => {
             {/* Comment Section */}
             {showComments && (
                 <div className={styles['post-comment-section']}>
-                    <ul className={styles['post-comment-list']}>
-                        {comments.map((comment, index) => (
-                            <li key={index} className={styles['post-comment-item']}>
-                                <span className={styles['post-comment-username']}>{comment.user.username}: </span>
-                                <span className={styles['post-comment-text']}>{comment.content}</span>
-                            </li>
-                        ))}
-                    </ul>
+                    {comments && comments.length > 0 ? (
+                        <ul className={styles['post-comment-list']}>
+                            {comments.map((comment, index) => (
+                                <li key={index} className={styles['post-comment-item']}>
+                                    <span className={styles['post-comment-username']}>{comment.user.username}: </span>
+                                    <span className={styles['post-comment-text']}>{comment.content}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p>No comments yet</p>
+                    )}
                     <div className={styles['post-comment-input-container']}>
                         <input
                             type='text'
