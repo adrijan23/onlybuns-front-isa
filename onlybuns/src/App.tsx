@@ -25,14 +25,7 @@ const App = () => {
                     <Route path="/login" element={<Login />} />
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/activate" element={<ActivateAccount />} />
-                    <Route
-                        path="/feed"
-                        element={
-                            <ProtectedRoute>
-                                <Feed />
-                            </ProtectedRoute>
-                        }
-                    />
+                    <Route path="/feed" element={<Feed />} />
                     <Route
                         path="/trends"
                         element={
