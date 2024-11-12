@@ -10,6 +10,7 @@ import { AuthContext } from '../../context/AuthContext';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 import markerRetina from 'leaflet/dist/images/marker-icon-2x.png';
+import { useNavigate } from 'react-router-dom';
 
 const DefaultIcon = L.icon({
   iconUrl: markerIcon,
@@ -32,7 +33,7 @@ const CreatePost: React.FC = () => {
   const authContext = useContext(AuthContext);
   if (!authContext) throw new Error('AuthContext is undefined!');
   const { auth } = authContext;
-
+  const navigate = useNavigate();
 
   // Function to get address from coordinates using a reverse geocoding API
   const getAddressFromCoordinates = async (lat: number, lng: number) => {
@@ -91,6 +92,7 @@ const CreatePost: React.FC = () => {
       // Send the request to the server
       const response = await axios.post('/api/posts', formData)
       console.log('Post created:', response.data);
+      navigate('/feed');
     } catch (error) {
       console.error('Error creating post:', error);
     }
