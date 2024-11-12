@@ -4,20 +4,16 @@ import { useParams } from 'react-router-dom';
 import styles from './Post.module.css';
 import axios from '../../config/axiosConfig';
 
-interface Comment {
-    username: string;
-    text: string;
-}
-
 interface User {
     id: number;
     username: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    enabled: boolean;
-    lastPasswordResetDate: number;
-    roles: Role[];
+}
+
+interface Comment {
+    id: number;
+    content: string;
+    createdAt: string;
+    user: User;
 }
 
 interface Role {
@@ -37,15 +33,14 @@ interface Post {
 
 const Post = () => {
     const { id } = useParams<{ id: string }>();
-    const [comments, setComments] = useState<Comment[]>([
-        { username: 'Alice', text: 'Great post!' },
-        { username: 'Bob', text: 'Amazing content! This is a longer comment to test line wrapping.' }]);
+    const [comments, setComments] = useState<Comment[]>([]);
     const [showComments, setShowComments] = useState<boolean>(false);
     const [newComment, setNewComment] = useState<string>('');
     const [showMenu, setShowMenu] = useState<boolean>(false);
     const [post, setPost] = useState<Post | null>(null);
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [editedDescription, setEditedDescription] = useState<string>('');
+    const [liked, setLiked] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
@@ -62,11 +57,64 @@ const Post = () => {
         fetchPost();
     }, [id]);
 
-    const addComment = () => {
+    useEffect(() => {
+        const fetchComments = async () => {
+            try {
+                const response = await axios.get<Comment[]>(`/api/posts/${id}/comments`);
+                setComments(response.data);
+            } catch (error) {
+                console.error('Error fetching comments:', error);
+            }
+        };
+
+        fetchComments();
+    }, [id]);
+
+    const addComment = async () => {
         if (newComment.trim()) {
-            setComments([...comments, { username: 'me', text: newComment }]);
-            setNewComment('');
+            try {
+                const response = await axios.post(`/api/posts/${id}/comments`, {
+                    content: newComment,
+                    userId: post?.user.id,
+                });
+                setComments([...comments, response.data]);
+                setNewComment('');
+            } catch (error) {
+                console.error('Error adding comment:', error);
+            }
         }
+    };
+
+    const likePost = async () => {
+        try {
+            const userId = post?.user.id;
+            await axios.post(`/api/posts/${id}/like`, null, {
+                params: { userId }
+            });
+            setLiked(true);
+        } catch (error) {
+            console.error('Error liking post: ', error);
+        }
+    }
+
+    const unlikePost = async () => {
+        try {
+            const userId = post?.user.id;
+            console.log(userId);
+            await axios.delete(`/api/posts/${id}/like`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                params: { userId },
+            });
+            setLiked(false);
+        } catch (error) {
+            console.error('Error unliking post:', error);
+        }
+    };
+
+    const toggleLike = () => {
+        liked ? unlikePost() : likePost();
     }
 
     const editPost = async () => {
@@ -90,7 +138,7 @@ const Post = () => {
 
     const deletePost = async () => {
         try {
-            await axios.delete(`/api/posts/id/1`);
+            await axios.delete(`/api/posts/id/${post?.id}`);
 
             console.log('Post deleted successfully');
         } catch (error) {
@@ -99,8 +147,7 @@ const Post = () => {
     };
 
     const getImageUrl = (imagePath: string) => {
-        console.log(post?.imagePath);
-        return `http://localhost:8082/${imagePath}`; // Adjust base URL if needed
+        return `http://localhost:8082/onlybuns/${imagePath}`;
     };
 
 
@@ -157,7 +204,10 @@ const Post = () => {
             {/* Bottom Bar */}
             <div className={styles['post-bottom-bar']}>
                 <div className={styles['post-bottom-icons']}>
-                    <FaHeart className={styles['post-icon']} />
+                    <FaHeart
+                        className={`${styles['post-icon']} ${liked ? styles['liked'] : ''}`}
+                        onClick={toggleLike}
+                    />
                     <FaComment className={styles['post-icon']} onClick={() => setShowComments(!showComments)} />
                 </div>
             </div>
@@ -177,8 +227,8 @@ const Post = () => {
                     <ul className={styles['post-comment-list']}>
                         {comments.map((comment, index) => (
                             <li key={index} className={styles['post-comment-item']}>
-                                <span className={styles['post-comment-username']}>{comment.username}: </span>
-                                <span className={styles['post-comment-text']}>{comment.text}</span>
+                                <span className={styles['post-comment-username']}>{comment.user.username}: </span>
+                                <span className={styles['post-comment-text']}>{comment.content}</span>
                             </li>
                         ))}
                     </ul>

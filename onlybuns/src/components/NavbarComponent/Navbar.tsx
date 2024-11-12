@@ -15,6 +15,7 @@ const Navbar = () => {
         <Link to="/post" className={styles.link}>Post</Link>
         <Link to="/createpost" className={styles.link}>Create Post</Link>
         <Link to="/login" className={styles.link}>Login</Link>
+        <Link to="/admin/users" className={styles.link}>Users</Link>
       </nav>
     </div>
   );

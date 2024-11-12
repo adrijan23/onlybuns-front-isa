@@ -131,6 +131,10 @@
     cursor: pointer;
 }
 
+.liked {
+    color: red;
+}
+
 /* Comment Section */
 .post-comment-section {
     padding: 10px;
@@ -182,4 +186,3 @@
 .post-add-comment-button:hover {
     background-color: #0056b3;
 }
-
