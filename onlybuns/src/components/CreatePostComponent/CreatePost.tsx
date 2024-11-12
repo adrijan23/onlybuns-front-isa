@@ -1,4 +1,4 @@
-import React, { useContext,useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
 import { LeafletMouseEvent } from 'leaflet';
 import L from 'leaflet';
@@ -29,7 +29,7 @@ const CreatePost: React.FC = () => {
   const [image, setImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
-   const authContext = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
   if (!authContext) throw new Error('AuthContext is undefined!');
   const { auth } = authContext;
 
@@ -46,17 +46,17 @@ const CreatePost: React.FC = () => {
     }
   };
 
-const LocationMarker = () => {
-  useMapEvents({
-    click(e: LeafletMouseEvent) {
-      console.log("Map clicked at:", e.latlng); // Debugging: Log coordinates
-      setCoordinates(e.latlng);
-      getAddressFromCoordinates(e.latlng.lat, e.latlng.lng);
-    },
-  });
+  const LocationMarker = () => {
+    useMapEvents({
+      click(e: LeafletMouseEvent) {
+        console.log("Map clicked at:", e.latlng); // Debugging: Log coordinates
+        setCoordinates(e.latlng);
+        getAddressFromCoordinates(e.latlng.lat, e.latlng.lng);
+      },
+    });
 
-  return coordinates ? <Marker position={[coordinates.lat, coordinates.lng]} /> : null;
-}
+    return coordinates ? <Marker position={[coordinates.lat, coordinates.lng]} /> : null;
+  }
 
   // Handle image selection and preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,16 +77,16 @@ const LocationMarker = () => {
       latitude: coordinates?.lat || null,
       longitude: coordinates?.lng || null,
     };
-  
+
     // Create FormData and append the JSON and image correctly
     const formData = new FormData();
     const jsonBlob = new Blob([JSON.stringify(postRequest)], { type: 'application/json' });
     formData.append('postRequest', jsonBlob);
-  
+
     if (image) {
       formData.append('image', image);
     }
-  
+
     try {
       // Send the request to the server
       const response = await axios.post('/api/posts', formData)
@@ -95,7 +95,7 @@ const LocationMarker = () => {
       console.error('Error creating post:', error);
     }
   };
-  
+
   return (
     <div className={styles['create-post']}>
       <h2>Create Post</h2>

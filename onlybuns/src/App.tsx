@@ -14,6 +14,7 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Signup from './components/SignupComponent/Signup';
 import ActivateAccount from './components/ActivateAccount';
+import AdminUsers from './components/AdminUsers/AdminUsers';
 import Layout from './components/LayoutComponent/Layout';
 
 const App = () => {
@@ -26,6 +27,7 @@ const App = () => {
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/activate" element={<ActivateAccount />} />
                     <Route path="/feed" element={<Feed />} />
+                    <Route path="/admin/users" element={<AdminUsers />} />
                     <Route
                         path="/trends"
                         element={
@@ -66,13 +68,13 @@ const App = () => {
                             </ProtectedRoute>
                         }
                     />
-                    <Route 
-                        path="/post" 
-                        element={
-                            <ProtectedRoute>
-                                <Post />
-                            </ProtectedRoute>
-                        } 
+                    <Route
+                      path="/post/:id"
+                      element={
+                        <ProtectedRoute>
+                          <Post />
+                        </ProtectedRoute>
+                      }
                     />
                 </Route>
             </Routes>
