@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { FaEllipsisH, FaHeart, FaComment } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import styles from './Post.module.css';
 import axios from '../../config/axiosConfig';
+import { AuthContext } from '../../context/AuthContext';
 
 interface User {
     id: number;
@@ -41,7 +42,12 @@ const Post = () => {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [editedDescription, setEditedDescription] = useState<string>('');
     const [liked, setLiked] = useState<boolean>(false);
+
     const [error, setError] = useState<string | null>(null);
+    const authContext = useContext(AuthContext);
+    if (!authContext) throw new Error("AuthContext is undefined!");
+    const { auth } = authContext;
+    const userId = auth.user?.id;
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -58,16 +64,23 @@ const Post = () => {
     }, [id]);
 
     useEffect(() => {
-        const fetchComments = async () => {
+        const fetchDetails = async () => {
             try {
                 const response = await axios.get<Comment[]>(`/api/posts/${id}/comments`);
                 setComments(response.data);
+
+                const likesResponse = await axios.get<User[]>(`http://localhost:8082/api/posts/${id}/likes`,
+                    {
+                        params: { userId },
+                    }
+                );
+                setLiked((likesResponse.data || []).some(like => like.id === userId));
             } catch (error) {
                 console.error('Error fetching comments:', error);
             }
         };
 
-        fetchComments();
+        fetchDetails();
     }, [id]);
 
     const addComment = async () => {
@@ -75,7 +88,7 @@ const Post = () => {
             try {
                 const response = await axios.post(`/api/posts/${id}/comments`, {
                     content: newComment,
-                    userId: post?.user.id,
+                    userId: userId,
                 });
                 setComments([...comments, response.data]);
                 setNewComment('');
@@ -87,7 +100,6 @@ const Post = () => {
 
     const likePost = async () => {
         try {
-            const userId = post?.user.id;
             await axios.post(`/api/posts/${id}/like`, null, {
                 params: { userId }
             });
@@ -100,7 +112,6 @@ const Post = () => {
     const unlikePost = async () => {
         try {
             const userId = post?.user.id;
-            console.log(userId);
             await axios.delete(`/api/posts/${id}/like`, {
                 headers: {
                     'Content-Type': 'application/json',
