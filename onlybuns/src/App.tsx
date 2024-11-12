@@ -18,70 +18,70 @@ import ActivateAccount from './components/ActivateAccount';
 const App = () => {
   return (
     <AuthProvider>
-        <Router>
-            <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/activate" element={<ActivateAccount />} />
-                <Route
-                    path="/feed"
-                    element={
-                        <ProtectedRoute>
-                            <Feed />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/trends"
-                    element={
-                        <ProtectedRoute>
-                            <Trends/>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/map"
-                    element={
-                        <ProtectedRoute>
-                            <MapView />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/chat"
-                    element={
-                        <ProtectedRoute>
-                            <Chat/>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/createpost"
-                    element={
-                        <ProtectedRoute>
-                            <CreatePost/>
-                        </ProtectedRoute>
-                    }
-                />
-                <Route
-                    path="/profile"
-                    element={
-                        <ProtectedRoute>
-                            <Profile />
-                        </ProtectedRoute>
-                    }
-                />
-                <Route 
-                    path="/post" 
-                    element={
-                        <ProtectedRoute>
-                            <Post />
-                        </ProtectedRoute>
-                    } 
-                />
-            </Routes>
-        </Router>
+      <Router>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/activate" element={<ActivateAccount />} />
+          <Route
+            path="/feed"
+            element={
+              <ProtectedRoute>
+                <Feed />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/trends"
+            element={
+              <ProtectedRoute>
+                <Trends />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/map"
+            element={
+              <ProtectedRoute>
+                <MapView />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/createpost"
+            element={
+              <ProtectedRoute>
+                <CreatePost />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/post/:id"
+            element={
+              <ProtectedRoute>
+                <Post />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 };
