@@ -158,7 +158,7 @@ const Post = () => {
     };
 
     const getImageUrl = (imagePath: string) => {
-        return `http://localhost:8082/onlybuns/${imagePath}`;
+        return `http://localhost:8082/${imagePath}`;
     };
 
 
