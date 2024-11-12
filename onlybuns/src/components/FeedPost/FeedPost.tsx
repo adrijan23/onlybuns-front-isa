@@ -63,9 +63,14 @@ const Post: React.FC<PostProps> = ({ post }) => {
             </div>
 
             {/* Post Image */}
-            {post.imagePath && (
-                <img src={post.imagePath} alt="Post" className={styles.postImage} />
-            )}
+            <img
+    src={`http://localhost:8082/${post.imagePath}`}
+    alt="Post"
+    className={styles.postImage}
+    crossOrigin="anonymous"
+/>
+
+
 
             {/* Post Description */}
             <div className={styles.postDescription}>
