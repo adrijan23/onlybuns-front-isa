@@ -8,7 +8,7 @@ interface PostData {
     description: string;
     imagePath: string;
     address: string;
-    createdAt: string;
+    createdAt: Array<number>;
     user: {
         username: string;
     };
@@ -18,14 +18,40 @@ const Feed: React.FC = () => {
     const [posts, setPosts] = useState<PostData[]>([]);
     const [error, setError] = useState<string | null>(null);
 
+    // Utility function to sort posts by `createdAt`
+    const sortPostsByDate = (posts: PostData[]): PostData[] => {
+        return posts.sort((a, b) => {
+            const dateA = new Date(
+                a.createdAt[0],
+                a.createdAt[1] - 1, // Month (0-based in JavaScript)
+                a.createdAt[2],
+                a.createdAt[3] || 0,
+                a.createdAt[4] || 0,
+                a.createdAt[5] || 0,
+                Math.floor((a.createdAt[6] || 0) / 1e6) // Convert nanoseconds to milliseconds
+            ).getTime();
+
+            const dateB = new Date(
+                b.createdAt[0],
+                b.createdAt[1] - 1,
+                b.createdAt[2],
+                b.createdAt[3] || 0,
+                b.createdAt[4] || 0,
+                b.createdAt[5] || 0,
+                Math.floor((b.createdAt[6] || 0) / 1e6)
+            ).getTime();
+
+            return dateB - dateA;
+        });
+};
+
+
     useEffect(() => {
         const fetchPosts = async () => {
             try {
                 const response = await axios.get('/api/posts'); // Adjust endpoint as needed
-                const sortedPosts = response.data.sort((a: PostData, b: PostData) => 
-                  new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-              );
-              setPosts(sortedPosts);
+                const sortedPosts = sortPostsByDate(response.data);
+                setPosts(sortedPosts);
             } catch (err) {
                 setError('Failed to load posts. Please try again later.');
             }

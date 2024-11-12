@@ -22,7 +22,9 @@ const Navbar = () => {
             <Link to="/map" className={styles.link}>Posts near you</Link>
             <Link to="/chat" className={styles.link}>Chat</Link>
             <Link to="/createpost" className={styles.link}>Create Post</Link>
-            <Link to="/admin/users" className={styles.link}>Users</Link>
+            {auth.user.roles?.some(role => role.name === "ROLE_ADMIN") && (
+              <Link to="/admin/users" className={styles.link}>Users</Link>
+            )}
 
             {/* Logout button */}
             <button className={styles.link} onClick={logout}>Logout</button>

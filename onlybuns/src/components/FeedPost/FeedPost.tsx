@@ -8,7 +8,7 @@ interface PostProps {
         description: string;
         imagePath: string;
         address: string;
-        createdAt: string;
+        createdAt: Array<number>;
         user: {
             username: string;
         };
