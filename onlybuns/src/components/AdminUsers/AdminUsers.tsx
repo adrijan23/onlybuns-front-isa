@@ -23,6 +23,10 @@ const AdminUsers: React.FC = () => {
     const [error, setError] = useState("");
     const [userPosts, setPosts] = useState<{ [key: number]: Post }>({});
 
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const pageSize = 5;
+
     const [searchFirstName, setSearchFirstName] = useState("");
     const [searchLastName, setSearchLastName] = useState("");
     const [searchEmail, setSearchEmail] = useState("");
@@ -39,7 +43,25 @@ const AdminUsers: React.FC = () => {
     const roles = auth.user?.roles;
     const navigate = useNavigate();
 
+
+    const fetchUsers = async (page: number) => {
+        try {
+            const response = await axios.get(`http://localhost:8082/api/user/page`, {
+                params: { page, size: pageSize }
+            });
+            setUsers(response.data.content);
+            setTotalPages(response.data.totalPages);
+        } catch (err) {
+            setError("Error fetching users. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     useEffect(() => {
+
+        console.log(currentPage);
         const isAdmin = () => {
             return roles && roles.some(value => value.name === "ROLE_ADMIN");
         };
@@ -49,19 +71,8 @@ const AdminUsers: React.FC = () => {
             return;
         }
 
-        const fetchUsers = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8082/api/user/all`);
-                setUsers(response.data);
-            } catch (err) {
-                setError("Error fetching users. Please try again.");
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchUsers();
-    }, [navigate]);
+        fetchUsers(currentPage);
+    }, [navigate, currentPage]);
 
     const fetchPosts = async (userId: number) => {
         try {
@@ -73,7 +84,16 @@ const AdminUsers: React.FC = () => {
                 }
             }));
         } catch (error) {
-            setError(`Failed to load posts for user ${userId}`);
+            if (axios.isAxiosError(error) && error.response?.status === 404) {
+                setPosts(previous => ({
+                    ...previous,
+                    [userId]: {
+                        posts: 0,
+                    }
+                }));
+            } else {
+                console.log("An error occured while fetching posts:", error);
+            }
         }
     }
 
@@ -95,6 +115,14 @@ const AdminUsers: React.FC = () => {
             isWithinRange
         );
     });
+
+    const handlePageChange = (newPage: number) => {
+        if (newPage >= 0 && newPage < totalPages) {
+            console.log(newPage);
+            setCurrentPage(newPage);
+            console.log(currentPage);
+        }
+    }
 
     const sortUsers = (users: User[]) => {
         return [...users].sort((a, b) => {
@@ -202,6 +230,19 @@ const AdminUsers: React.FC = () => {
                     ))}
                 </tbody>
             </table>
+
+            {/* Pagination */}
+            <div>
+                <button onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 0}>
+                    Previous
+                </button>
+                <span>Page  of </span>
+                <button onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages - 1}>
+                    Next
+                </button>
+            </div>
         </div>
     );
 };
