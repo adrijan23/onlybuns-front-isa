@@ -32,8 +32,6 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
     const [showComments, setShowComments] = useState(false);
     const [newComment, setNewComment] = useState('');
     const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(0);
-    const [commentCount, setCommentCount] = useState(0);
 
     const [showLikeAnimation, setShowLikeAnimation] = useState(false);
 
@@ -42,31 +40,16 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
     const { auth } = authContext;
     const userId = auth.user?.id;
 
-    useEffect(() => {
-        const fetchCounts = async () => {
-            try {
-                const likeResponse = await axios.get(`api/posts/${post.id}/likecount`);
-                setLikeCount(likeResponse.data);
-                console.log(likeResponse.data)
-                const commentResponse = await axios.get(`api/posts/${post.id}/commentcount`);
-                setCommentCount(commentResponse.data);
-            } catch (error) {
-                console.error('Error fetching counts:', error);
-            }
-        };
-    
-        fetchCounts();
-    }, [post.id]);
 
     useEffect(() => {
         const fetchComments = async () => {
             try {
                 const response = await axios.get(`/api/posts/${post.id}/comments`);
                 setComments(response.data || []);
-                const likesResponse = await axios.get<User[]>(`http://localhost:8082/api/posts/${post.id}/likes`, {
+                /*const likesResponse = await axios.get<User[]>(`http://localhost:8082/api/posts/${post.id}/likes`, {
                     params: { userId },
                 });
-                setLiked((likesResponse.data || []).some((like) => like.id === userId));
+                setLiked((likesResponse.data || []).some((like) => like.id === userId));*/
             } catch (error) {
                 console.error('Error fetching comments:', error);
                 setComments([]);
@@ -86,7 +69,6 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                 params: { userId },
             });
             setLiked(true);
-            setLikeCount((prev) => prev + 1); // Increment like count
             triggerLikeAnimation(); // Show the heart animation
         } catch (error) {
             console.error('Error liking post: ', error);
@@ -102,7 +84,6 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                 params: { userId },
             });
             setLiked(false);
-            setLikeCount((prev) => prev - 1); // Decrement like count
         } catch (error) {
             console.error('Error unliking post:', error);
         }
@@ -126,7 +107,6 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                 });
                 setComments([...comments, response.data]);
                 setNewComment('');
-                setCommentCount((prev) => prev + 1); // Increment comment count
             } catch (error) {
                 console.error('Error adding comment:', error);
             }
@@ -174,7 +154,6 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                     />
                     <span>{post.likeCount}</span> {/* Display like count */}
                     <FaComment className={styles['post-icon']} onClick={handleToggleComments} />
-                    <span>{commentCount}</span> {/* Display comment count */}
                 </div>
             </div>
 
