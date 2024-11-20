@@ -147,7 +147,11 @@ const Profile: React.FC = () => {
               className={styles['profile-post-container']}
               onClick={() => handlePostClick(post.id)}
             >
-              <img src={image} alt={`Post ${post.id}`} className={styles['profile-post-thumbnail']} />
+              <img
+                    src={`http://localhost:8082/${post.imagePath}`}
+                    alt="Post"
+                    className={styles['profile-post-thumbnail']}
+                />
               <div className={styles['profile-post-info']}>
                 <span className={styles['profile-post-likes']}>{postDetails[post.id]?.likes ?? 0} Likes</span>
                 <span className={styles['profile-post-comments']}>{postDetails[post.id]?.comments ?? 0} Comments</span>

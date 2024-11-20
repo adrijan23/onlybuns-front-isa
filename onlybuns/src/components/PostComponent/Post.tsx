@@ -215,10 +215,10 @@ const Post = () => {
             {/* Bottom Bar */}
             <div className={styles['post-bottom-bar']}>
                 <div className={styles['post-bottom-icons']}>
-                    <FaHeart
-                        className={`${styles['post-icon']} ${liked ? styles['liked'] : ''}`}
-                        onClick={toggleLike}
-                    />
+                            <FaHeart
+                className={`${styles['post-icon']} ${liked ? styles['liked'] : styles['unliked']}`}
+                onClick={toggleLike}
+            />
                     <FaComment className={styles['post-icon']} onClick={() => setShowComments(!showComments)} />
                 </div>
             </div>

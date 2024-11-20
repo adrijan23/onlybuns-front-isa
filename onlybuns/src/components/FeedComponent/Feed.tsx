@@ -3,15 +3,18 @@ import axios from 'axios';
 import styles from './Feed.module.css';
 import Post from '../FeedPost/FeedPost';
 
+interface User {
+    id: number;
+    username: string
+}
 interface PostData {
     id: number;
     description: string;
     imagePath: string;
     address: string;
     createdAt: Array<number>;
-    user: {
-        username: string;
-    };
+    user: User;
+    likeCount:number;
 }
 
 const Feed: React.FC = () => {
