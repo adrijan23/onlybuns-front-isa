@@ -71,6 +71,7 @@
 }
 
 .post-likes-description {
+    text-align: left;
     margin: 12px 0;
 }
 
@@ -93,6 +94,7 @@
 }
 
 .post-comment-section {
+    text-align: left;
     margin-top: 16px;
     padding-top: 16px;
     border-top: 1px solid #eee; /* Separate section with a line */
@@ -168,3 +170,33 @@
 .unliked {
     color: #888; /* Gray color when unliked */
 }
+
+.post-menu-container {
+    position: relative;
+}
+
+.post-menu-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.post-menu-item:hover {
+    background: #f0f0f0;
+}
+

@@ -62,6 +62,8 @@ const Feed: React.FC = () => {
         fetchPosts();
     }, []);
 
+    
+
     return (
         <div className={styles.feedContainer}>
             <h2>Explore posts</h2>

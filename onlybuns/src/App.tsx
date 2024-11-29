@@ -1,21 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from './components/HomePageComponent/HomePage';
-import Feed from './components/FeedComponent/Feed';
-import Trends from './components/TrendsComponent/Trends';
-import MapView from './components/MapComponent/MapView';
-import Chat from './components/ChatComponent/Chat';
-import Profile from './components/ProfileComponent/Profile';
 import CreatePost from './components/CreatePostComponent/CreatePost';
-import Navbar from './components/NavbarComponent/Navbar';
-import Login from './components/LoginComponent/Login';
-import Post from './components/PostComponent/Post';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
-import Signup from './components/SignupComponent/Signup';
 import ActivateAccount from './components/ActivateAccount';
-import AdminUsers from './components/AdminUsers/AdminUsers';
 import Layout from './components/LayoutComponent/Layout';
+import PostPage from './pages/PostPage';
+import ProfilePage from './pages/ProfilePage';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import SignUpPage from './pages/SignUpPage';
+import UsersPage from './pages/UsersPage';
 
 const App = () => {
   return (
@@ -23,35 +18,13 @@ const App = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<Layout />} >
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<Signup />} />
+                    <Route index element={<HomePage />} />
+
+                    <Route path="/login" element={<LoginPage />} />
+                    <Route path="/signup" element={<SignUpPage />} />
                     <Route path="/activate" element={<ActivateAccount />} />
-                    <Route path="/feed" element={<Feed />} />
-                    <Route path="/admin/users" element={<AdminUsers />} />
-                    <Route
-                        path="/trends"
-                        element={
-                            <ProtectedRoute>
-                                <Trends/>
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/map"
-                        element={
-                            <ProtectedRoute>
-                                <MapView />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/chat"
-                        element={
-                            <ProtectedRoute>
-                                <Chat/>
-                            </ProtectedRoute>
-                        }
-                    />
+                    <Route path="/admin/users" element={<UsersPage />} />
+
                     <Route
                         path="/createpost"
                         element={
@@ -64,7 +37,7 @@ const App = () => {
                         path="/profile"
                         element={
                             <ProtectedRoute>
-                                <Profile />
+                                <ProfilePage />
                             </ProtectedRoute>
                         }
                     />
@@ -72,7 +45,7 @@ const App = () => {
                       path="/post/:id"
                       element={
                         <ProtectedRoute>
-                          <Post />
+                          <PostPage />
                         </ProtectedRoute>
                       }
                     />

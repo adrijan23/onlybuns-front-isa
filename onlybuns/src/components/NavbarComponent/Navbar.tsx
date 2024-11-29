@@ -12,15 +12,12 @@ const Navbar = () => {
     <div className={styles.navbar}>
       <nav>
         {/* Link always visible */}
-        <Link to="/feed" className={styles.link}>Feed</Link>
+        <Link to="/" className={styles.link}>Home</Link>
 
         {/* Links visible only if the user is logged in */}
         {auth.user ? (
           <>
             <Link to="/profile" className={styles.link}>Profile</Link>
-            <Link to="/trends" className={styles.link}>Trends</Link>
-            <Link to="/map" className={styles.link}>Posts near you</Link>
-            <Link to="/chat" className={styles.link}>Chat</Link>
             <Link to="/createpost" className={styles.link}>Create Post</Link>
             {auth.user.roles?.some(role => role.name === "ROLE_ADMIN") && (
               <Link to="/admin/users" className={styles.link}>Users</Link>

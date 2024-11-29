@@ -3,6 +3,7 @@ import axios from 'axios';
 import { FaEllipsisH, FaHeart, FaComment } from 'react-icons/fa';
 import styles from './FeedPost.module.css';
 import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 interface User {
     id: number;
@@ -22,8 +23,8 @@ interface PostProps {
         description: string;
         imagePath: string;
         user: User;
-        likeCount:number
-        };
+        likeCount: number;
+    };
 }
 
 const FeedPost: React.FC<PostProps> = ({ post }) => {
@@ -32,24 +33,23 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
     const [showComments, setShowComments] = useState(false);
     const [newComment, setNewComment] = useState('');
     const [liked, setLiked] = useState(false);
-
     const [showLikeAnimation, setShowLikeAnimation] = useState(false);
+    const [showMenu, setShowMenu] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedDescription, setEditedDescription] = useState(post.description);
 
     if (!authContext) throw new Error('AuthContext is undefined!');
 
     const { auth } = authContext;
     const userId = auth.user?.id;
 
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchComments = async () => {
             try {
                 const response = await axios.get(`/api/posts/${post.id}/comments`);
                 setComments(response.data || []);
-                /*const likesResponse = await axios.get<User[]>(`http://localhost:8082/api/posts/${post.id}/likes`, {
-                    params: { userId },
-                });
-                setLiked((likesResponse.data || []).some((like) => like.id === userId));*/
             } catch (error) {
                 console.error('Error fetching comments:', error);
                 setComments([]);
@@ -64,6 +64,11 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
     };
 
     const likePost = async () => {
+        if (!auth || !userId) {
+            navigate('/login');
+            return;
+        }
+
         try {
             await axios.post(`/api/posts/${post.id}/like`, null, {
                 params: { userId },
@@ -76,11 +81,13 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
     };
 
     const unlikePost = async () => {
+        if (!auth || !userId) {
+            navigate('/login');
+            return;
+        }
+
         try {
             await axios.delete(`/api/posts/${post.id}/like`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
                 params: { userId },
             });
             setLiked(false);
@@ -99,17 +106,47 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
     };
 
     const addComment = async () => {
+        if (!auth || !userId) {
+            navigate('/login');
+            return;
+        }
+
         if (newComment.trim()) {
             try {
                 const response = await axios.post(`/api/posts/${post.id}/comments`, {
                     content: newComment,
-                    userId: userId,
+                    userId,
                 });
                 setComments([...comments, response.data]);
                 setNewComment('');
             } catch (error) {
                 console.error('Error adding comment:', error);
             }
+        }
+    };
+
+    const deletePost = async () => {
+        try {
+            await axios.delete(`/api/posts/id/${post.id}`);
+            console.log('Post deleted successfully');
+            // You may want to trigger a re-fetch or remove the post from the parent component
+            navigate('/profile');
+        } catch (error) {
+            console.error('Error deleting post:', error);
+        }
+    };
+
+    const editPost = async () => {
+        if (!editedDescription.trim()) return;
+        try {
+            const updatedPost = { ...post, description: editedDescription };
+            const response = await axios.put(`/api/posts/id/${post.id}`, updatedPost);
+
+            post.description = editedDescription
+            setIsEditing(false);
+            console.log('Post updated successfully:', response.data);
+        } catch (error) {
+            console.error('Error updating post:', error);
         }
     };
 
@@ -120,7 +157,31 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                 <div className={styles['post-author-info']}>
                     <span className={styles['post-author-name']}>{post.user.username}</span>
                 </div>
-                <FaEllipsisH className={styles['post-menu-icon']} />
+                {post.user.id === userId && (
+                    <div className={styles['post-menu-container']}>
+                        <FaEllipsisH
+                            className={styles['post-menu-icon']}
+                            onClick={() => setShowMenu(!showMenu)}
+                        />
+                        {showMenu && (
+                            <ul className={styles['post-menu-dropdown']}>
+                                <li
+                                    onClick={() => setIsEditing(true)}
+                                    className={styles['post-menu-item']}
+                                >
+                                    Edit
+                                </li>
+                                <li
+                                    onClick={deletePost}
+                                    className={styles['post-menu-item']}
+                                >
+                                    Delete
+                                </li>
+                            </ul>
+                        )}
+                    </div>
+                )}
+
             </div>
 
             {/* Post Image with Like Animation */}
@@ -138,12 +199,25 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
             </div>
 
             {/* Post Description */}
-            <div className={styles['post-likes-description']}>
-                <p className={styles['post-post-description']}>
-                    <span className={styles['post-author-name']}>{post.user.username}: </span>
-                    {post.description}
-                </p>
-            </div>
+            {isEditing ? (
+                <div className={styles['post-edit-container']}>
+                    <textarea
+                        value={editedDescription}
+                        onChange={(e) => setEditedDescription(e.target.value)}
+                        className={styles['post-edit-input']}
+                    />
+                    <button onClick={editPost} className={styles['post-save-button']}>
+                        Save
+                    </button>
+                </div>
+            ) : (
+                <div className={styles['post-likes-description']}>
+                    <p className={styles['post-post-description']}>
+                        <span className={styles['post-author-name']}>{post.user.username}: </span>
+                        {post.description}
+                    </p>
+                </div>
+            )}
 
             {/* Like and Comment Icons */}
             <div className={styles['post-bottom-bar']}>
@@ -173,7 +247,9 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                             ))}
                         </ul>
                     ) : (
-                        <p className={styles['no-comments-message']}>No comments yet. Be the first to comment!</p>
+                        <p className={styles['no-comments-message']}>
+                            No comments yet. Be the first to comment!
+                        </p>
                     )}
 
                     <div className={styles['post-comment-input-container']}>
