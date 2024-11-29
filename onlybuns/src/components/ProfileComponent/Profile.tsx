@@ -10,6 +10,7 @@ interface User {
   username: string;
   firstName: string;
   lastName: string;
+  profileImage?: string;
 }
 
 interface Comment {
@@ -46,6 +47,9 @@ const Profile: React.FC = () => {
   const [isFollowingPopupVisible, setFollowingPopupVisible] = useState(false);
   const [isFollowed, setIsFollowed] = useState<boolean>(false);
   const [userDetails, setUserDetails] = useState<User>();
+  const [isImagePopupVisible, setImagePopupVisible] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   if (!authContext) throw new Error('AuthContext is undefined!');
 
@@ -54,7 +58,6 @@ const Profile: React.FC = () => {
   const userId = auth.user?.id;
   const params = useParams();
   const profileId = Number(params.id); // Profile being viewed
-  const profileImage = 'https://via.placeholder.com/150';
   const postsCount = userPosts.length;
 
   const navigate = useNavigate();
@@ -165,15 +168,73 @@ const Profile: React.FC = () => {
     setFollowingPopupVisible(false);
   };
 
+  const handleSaveImage = async () => {
+    if (!selectedImage) return;
+
+    const formData = new FormData();
+    formData.append('image', selectedImage);
+
+    try {
+      const response = await axios.post(`/api/user/${profileId}/profile-image`, formData);
+      console.log('Profile image updated:', response.data);
+      setImagePopupVisible(false);
+      fetchUserDetails(); // Refresh profile image
+    } catch (error) {
+      console.error('Failed to update profile image:', error);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files ? e.target.files[0] : null;
+    setSelectedImage(file);
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    } else {
+      setImagePreview(null);
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    try {
+      await axios.post(`/api/user/${profileId}/remove-profile-image`); // Sending null to the server
+      console.log('Profile image removed');
+      setImagePopupVisible(false);
+      fetchUserDetails(); // Refresh user details to reflect the removed image
+    } catch (error) {
+      console.error('Failed to remove profile image:', error);
+    }
+  };
+  
+
   return (
     <div className={styles['profile-page-container']}>
       {/* Profile Section */}
       <div className={styles['profile-info']}>
         <div className={styles['profile-left']}>
-          <img src={profileImage} alt="Profile" className={styles['profile-image']} />
+          <img src={userDetails?.profileImage ? `http://localhost:8082/${userDetails?.profileImage}` : 'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y'} alt="Profile" className={styles['profile-image']} onClick={() => profileId === userId && setImagePopupVisible(true)}/>
           <span className={styles['profile-username']}>{userDetails?.username}</span>
           <span className={styles['profile-name']}>{`${userDetails?.firstName || ''} ${userDetails?.lastName || ''}`}</span>
         </div>
+        {/* Popup for Editing Profile Image */}
+      {isImagePopupVisible && (
+        <div className={styles['popup-overlay']}>
+          <div className={styles['popup-container']}>
+            <button className={styles['close-button']} onClick={() => setImagePopupVisible(false)}>
+              &times;
+            </button>
+            <h2>Update Profile Image</h2>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+            {imagePreview && <img src={imagePreview} alt="Preview" className={styles['image-preview']} />}
+            <button className={styles['save-button']} onClick={handleSaveImage}>
+              Save
+            </button>
+            <button className={styles['remove-button']} onClick={handleRemoveImage}>
+              Remove Image
+            </button>
+          </div>
+        </div>
+      )}
         <div className={styles['profile-right']}>
           <div className={styles['profile-stats']}>
             <div className={styles['profile-stat-item']}>

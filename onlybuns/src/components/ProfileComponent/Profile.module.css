@@ -183,3 +183,16 @@
   background-color: #be123c; /* Darker red */
   transform: scale(1.05);
 }
+
+.image-preview {
+    max-width: 150px; /* Adjust as per your design */
+    max-height: 150px; /* Adjust to ensure a circular aspect */
+    width: 150px; /* Ensure consistent width */
+    height: 150px; /* Ensure consistent height */
+    border-radius: 50%; /* Make the image circular */
+    object-fit: cover; /* Ensure the image fits within the circle */
+    margin: 10px auto; /* Center the image in the popup */
+    display: block; /* Ensure proper centering */
+    border: 2px solid #ccc; /* Optional: Add a subtle border */
+  }
+  
