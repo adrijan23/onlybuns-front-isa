@@ -20,7 +20,7 @@ const Login: React.FC = () => {
 
         try {
             await login(username, password);
-            navigate('/profile');
+            navigate('/');
         } catch (err) {
             setError('Invalid username or password');
         }
