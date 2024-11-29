@@ -1,0 +1,17 @@
+.feedContainer {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+.postsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}

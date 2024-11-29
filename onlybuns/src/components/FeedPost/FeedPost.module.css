@@ -1,0 +1,202 @@
+.post-container {
+    background-color: #ffffff; /* White background */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    margin: 16px auto; /* Centered with spacing */
+    padding: 16px; /* Inner spacing */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    max-width: 600px; /* Limit width for better readability */
+    font-family: Arial, sans-serif; /* Simple font */
+}
+
+.post-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.post-author-info {
+    display: flex;
+    align-items: center;
+}
+
+.post-author-name {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333; /* Darker text */
+}
+
+.post-menu-icon {
+    color: #888; /* Grey icon */
+    cursor: pointer;
+}
+
+.post-image {
+    width: 100%; /* Full width */
+    height: auto; /* Maintain aspect ratio */
+    border-radius: 8px; /* Rounded corners for image */
+    margin-top: 8px;
+}
+.post-image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.like-animation {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pop 0.8s ease-out;
+    z-index: 10;
+}
+
+.like-animation-heart {
+    font-size: 80px;
+    color: #ff5757;
+    opacity: 0.8;
+}
+
+@keyframes pop {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0.5;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(2.0);
+        opacity: 1;
+    }
+
+}
+
+.post-likes-description {
+    text-align: left;
+    margin: 12px 0;
+}
+
+.post-post-description {
+    font-size: 14px;
+    color: #555; /* Subtle text color */
+    line-height: 1.6;
+}
+
+.post-bottom-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.post-bottom-icons {
+    display: flex;
+    align-items: center;
+}
+
+.post-comment-section {
+    text-align: left;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #eee; /* Separate section with a line */
+}
+
+.post-comment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.post-comment-item {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+.post-comment-username {
+    font-weight: bold;
+    color: #555;
+}
+
+.post-comment-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+}
+
+.post-comment-input {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 14px;
+    margin-right: 8px;
+    outline: none;
+    transition: border-color 0.2s ease;
+}
+
+.post-comment-input:focus {
+    border-color: #007bff; /* Blue border on focus */
+}
+
+.post-add-comment-button {
+    background-color: #007bff; /* Primary blue button */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.post-add-comment-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+.post-icon {
+    font-size: 20px;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease; /* Smooth hover and color transitions */
+}
+
+.post-icon:hover {
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.liked {
+    color: #ff5757; /* Red color when liked */
+}
+
+.unliked {
+    color: #888; /* Gray color when unliked */
+}
+
+.post-menu-container {
+    position: relative;
+}
+
+.post-menu-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-menu-item {
+    padding: 8px 16px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.post-menu-item:hover {
+    background: #f0f0f0;
+}
+
