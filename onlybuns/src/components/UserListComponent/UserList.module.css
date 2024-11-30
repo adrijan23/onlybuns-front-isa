@@ -1,0 +1,30 @@
+.container {
+    margin-top: 20px;
+  }
+  
+  .heading {
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .list {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+  }
+  
+  .user {
+    padding: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .name {
+    font-weight: bold;
+  }
+  
+  .likes {
+    color: #007bff;
+  }
+  
