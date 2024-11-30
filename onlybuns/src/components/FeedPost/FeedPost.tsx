@@ -3,7 +3,7 @@ import axios from 'axios';
 import { FaEllipsisH, FaHeart, FaComment } from 'react-icons/fa';
 import styles from './FeedPost.module.css';
 import { AuthContext } from '../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface User {
     id: number;
@@ -155,7 +155,11 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
             {/* Top Bar */}
             <div className={styles['post-top-bar']}>
                 <div className={styles['post-author-info']}>
-                    <span className={styles['post-author-name']}>{post.user.username}</span>
+                    <span className={styles['post-author-name']}>
+                        <Link to={`/profile/${post.user.id}`} className={styles['profile-link']}>
+                            {post.user.username}
+                        </Link>
+                    </span>
                 </div>
                 {post.user.id === userId && (
                     <div className={styles['post-menu-container']}>

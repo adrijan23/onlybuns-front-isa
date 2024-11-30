@@ -200,3 +200,27 @@
     background: #f0f0f0;
 }
 
+/* Style for the entire clickable username */
+.profile-link {
+    text-decoration: none; /* Remove underline */
+    color: #3b82f6; /* Modern blue color */
+    font-weight: bold; /* Emphasize the username */
+    font-size: 1rem; /* Slightly larger text */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+/* Hover effect for the username */
+.profile-link:hover {
+    color: #2563eb; /* Darker blue on hover */
+    text-decoration: underline; /* Add underline on hover */
+    letter-spacing: 0.5px; /* Slight animation for spacing */
+    transform: scale(1.05); /* Slight zoom effect */
+}
+
+/* Optional focus state for accessibility */
+.profile-link:focus {
+    outline: none;
+    text-decoration: underline;
+    box-shadow: 0 0 4px #3b82f6;
+}
+
