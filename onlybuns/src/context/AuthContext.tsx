@@ -64,9 +64,15 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
             await fetchUser(accessToken);
-        } catch (error) {
-            console.error('Login failed:', error);
-            throw new Error('Invalid username or password');
+        } catch (error: any) {
+            // Check if error is an Axios error
+            if (error.response) {
+                // Throw the actual error response so it can be handled in the component
+                throw error.response;
+            } else {
+                console.error('Unexpected login error:', error);
+                throw new Error('Unexpected error occurred during login');
+            }
         }
     };
 

@@ -21,8 +21,14 @@ const Login: React.FC = () => {
         try {
             await login(username, password);
             navigate('/');
-        } catch (err) {
-            setError('Invalid username or password');
+        } catch (err: any) {
+            if (err?.status === 429) {
+                setError('Too many login attempts. Please try again later.');
+            } else if (err?.status === 401) {
+                setError('Invalid username or password');
+            } else {
+                setError('An unexpected error occurred. Please try again.');
+            }
         }
     };
 
