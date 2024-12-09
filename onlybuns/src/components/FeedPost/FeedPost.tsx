@@ -55,7 +55,7 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                 setComments([]);
             }
         };
-
+        checkLike();
         fetchComments();
     }, [post.id]);
 
@@ -70,9 +70,7 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
         }
 
         try {
-            await axios.post(`/api/posts/${post.id}/like`, null, {
-                params: { userId },
-            });
+            await axios.post(`/api/posts/${post.id}/like`, null);
             setLiked(true);
             triggerLikeAnimation(); // Show the heart animation
         } catch (error) {
@@ -87,10 +85,17 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
         }
 
         try {
-            await axios.delete(`/api/posts/${post.id}/like`, {
-                params: { userId },
-            });
+            await axios.delete(`/api/posts/${post.id}/like`);
             setLiked(false);
+        } catch (error) {
+            console.error('Error unliking post:', error);
+        }
+    };
+
+    const checkLike = async () => {
+        try {
+            const response = await axios.get(`/api/posts/${post.id}/has_liked`);
+            setLiked(response.data);
         } catch (error) {
             console.error('Error unliking post:', error);
         }
