@@ -60,7 +60,7 @@ const TrendsPage: React.FC = () => {
   const fetchTopUsers = async () => {
     try {
       const response = await axios.get('/api/users/top-likers-weekly');
-      setTopUsers(response.data.users);
+      setTopUsers(response.data);
     } catch (error) {
       console.error('Error fetching top users:', error);
     }
