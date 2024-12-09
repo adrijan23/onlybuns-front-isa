@@ -11,6 +11,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import UsersPage from './pages/UsersPage';
+import TrendsPage from './pages/TrendsPage';
 
 const App = () => {
   return (
@@ -46,6 +47,14 @@ const App = () => {
                       element={
                         <ProtectedRoute>
                           <PostPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/trends"
+                      element={
+                        <ProtectedRoute>
+                          <TrendsPage />
                         </ProtectedRoute>
                       }
                     />
