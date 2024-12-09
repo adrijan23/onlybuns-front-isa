@@ -92,7 +92,19 @@ const Profile: React.FC = () => {
     try {
       if (profileId) {
         const response = await axios.get<Post[]>(`http://localhost:8082/api/posts/${profileId}`);
-        setUserPosts(response.data);
+        const posts = response.data;
+        setUserPosts(posts);
+  
+        // Fetch like counts for each post
+        const details: { [key: number]: PostDetails } = {};
+        for (const post of posts) {
+          const likeCountResponse = await axios.get<number>(`http://localhost:8082/api/posts/${post.id}/like_count`);
+          details[post.id] = {
+            likes: likeCountResponse.data,
+            comments: 0, // Assuming comments will be fetched later
+          };
+        }
+        setPostDetails(details);
       }
     } catch (error) {
       setError('Failed to load posts');
@@ -100,6 +112,7 @@ const Profile: React.FC = () => {
       setLoading(false);
     }
   };
+  
 
   const fetchFollowers = async () => {
     try {
