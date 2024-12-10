@@ -53,7 +53,7 @@ const Profile: React.FC = () => {
 
   if (!authContext) throw new Error('AuthContext is undefined!');
 
-  const { auth } = authContext;
+  const { auth, logout } = authContext;
   const username = auth.user?.username;
   const userId = auth.user?.id;
   const params = useParams();
@@ -61,6 +61,47 @@ const Profile: React.FC = () => {
   const postsCount = userPosts.length;
 
   const navigate = useNavigate();
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const [isPasswordModalVisible, setPasswordModalVisible] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+
+  const toggleDropdown = () => setDropdownVisible(!isDropdownVisible);
+  const closeDropdown = () => setDropdownVisible(false);
+
+  const handleOpenPasswordModal = () => {
+    closeDropdown();
+    setPasswordModalVisible(true);
+  };
+
+  const handleClosePasswordModal = () => {
+    setPasswordModalVisible(false);
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setPasswordError('');
+  };
+
+  const handleChangePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      setPasswordError('Passwords do not match!');
+      return;
+    }
+    try {
+      await axios.put(`/api/user/${userId}/update-password`, {
+        currentPassword,
+        newPassword,
+      });
+      alert('Password updated successfully!');
+      handleClosePasswordModal();
+      logout();
+      navigate('/login');
+    } catch (error) {
+      setPasswordError('Failed to update password. Please try again.');
+    }
+  };
 
   useEffect(() => {
     fetchUserDetails();
@@ -297,8 +338,62 @@ const Profile: React.FC = () => {
               </button>
             )}
           </div>
+          {profileId == userId && (
+              <div className={styles['settings-container']}>
+                <i
+                  className="fas fa-cog" // FontAwesome settings icon
+                  onClick={toggleDropdown}
+                  style={{ cursor: 'pointer', fontSize: '24px' }}
+                ></i>
+                {isDropdownVisible && (
+                  <div className={styles['dropdown-menu']} onBlur={closeDropdown}>
+                    <div className={styles['dropdown-item']} onClick={handleOpenPasswordModal}>
+                      Edit Password
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          
         </div>
       </div>
+
+       {/* Password Modal */}
+       {isPasswordModalVisible && (
+        <div className={styles['popup-overlay']}>
+          <div className={styles['popup-container']}>
+            <button className={styles['close-button']} onClick={handleClosePasswordModal}>
+              &times;
+            </button>
+            <h2>Edit Password</h2>
+            <input
+              type="password"
+              placeholder="Current Password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className={styles['input-field']}
+            />
+            <input
+              type="password"
+              placeholder="New Password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className={styles['input-field']}
+            />
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className={styles['input-field']}
+            />
+            {passwordError && <p className={styles['error-text']}>{passwordError}</p>}
+            <button className={styles['save-button']} onClick={handleChangePassword}>
+              Save
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Popup for Followers */}
       {isFollowersPopupVisible && (
