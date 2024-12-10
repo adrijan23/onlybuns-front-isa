@@ -67,14 +67,33 @@ const TrendsPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h1 style={{ textAlign: 'center', marginBottom: '30px' }}>Trends</h1>
-      
-      <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: '30px' }}>
-        {totalPosts !== null && <StatCard number={totalPosts} heading="Total Posts" />}
-        {monthlyPosts !== null && <StatCard number={monthlyPosts} heading="Posts This Month" />}
+  
+      {/* Top Section: Counts on the Left, User List on the Right */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px' }}>
+        {/* Left side: Counts */}
+        <div style={{ flex: '0 0 45%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          {totalPosts !== null && <StatCard number={totalPosts} heading="Total Posts" />}
+          {monthlyPosts !== null && <StatCard number={monthlyPosts} heading="Posts This Month" />}
+        </div>
+  
+        {/* Right side: User List */}
+        <div 
+          style={{ 
+            flex: '0 0 45%', 
+            overflowY: 'auto', 
+            maxHeight: '200px', 
+            border: '1px solid #ddd', 
+            borderRadius: '5px', 
+            padding: '10px' 
+          }}
+        >
+          <UserList users={topUsers} />
+        </div>
       </div>
-
+  
+      {/* Bottom Section: Posts */}
       <div style={{ textAlign: 'center', marginBottom: '20px' }}>
         <button 
           style={{
@@ -105,16 +124,16 @@ const TrendsPage: React.FC = () => {
           Top All-Time Posts
         </button>
       </div>
-
+  
       {activeView === 'weekly' ? (
         <PostList posts={topPostsWeekly} />
       ) : (
         <PostList posts={topPostsAllTime} />
       )}
-
-      <UserList users={topUsers} />
     </div>
   );
+  
+  
 };
 
 export default TrendsPage;
