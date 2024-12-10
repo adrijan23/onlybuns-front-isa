@@ -93,18 +93,12 @@ const Profile: React.FC = () => {
       if (profileId) {
         const response = await axios.get<Post[]>(`http://localhost:8082/api/posts/${profileId}`);
         const posts = response.data;
-        setUserPosts(posts);
+        setUserPosts(posts); // Update the state with the fetched posts
   
-        // Fetch like counts for each post
-        const details: { [key: number]: PostDetails } = {};
-        for (const post of posts) {
-          const likeCountResponse = await axios.get<number>(`http://localhost:8082/api/posts/${post.id}/like_count`);
-          details[post.id] = {
-            likes: likeCountResponse.data,
-            comments: 0, // Assuming comments will be fetched later
-          };
-        }
-        setPostDetails(details);
+        // Try fetching like/comment counts but do not block posts display on failure
+        fetchLikeCommentCount(posts).catch((error) => {
+          console.error('Failed to fetch like/comment counts:', error);
+        });
       }
     } catch (error) {
       setError('Failed to load posts');
@@ -112,6 +106,35 @@ const Profile: React.FC = () => {
       setLoading(false);
     }
   };
+  
+  
+
+  const fetchLikeCommentCount = async (posts: Post[]) => {
+    try {
+      const details: { [key: number]: PostDetails } = {};
+      for (const post of posts) {
+        try {
+          const likeCountResponse = await axios.get<number>(`http://localhost:8082/api/posts/${post.id}/like_count`);
+          const commentCountResponse = await axios.get<number>(`http://localhost:8082/api/posts/${post.id}/comment-count`);
+          details[post.id] = {
+            likes: likeCountResponse.data,
+            comments: commentCountResponse.data,
+          };
+        } catch (error) {
+          console.error(`Failed to load details for post ${post.id}:`, error);
+          details[post.id] = {
+            likes: 0, // Default values if fetching fails
+            comments: 0,
+          };
+        }
+      }
+      setPostDetails(details);
+    } catch (error) {
+      console.error('Failed to load post details:', error);
+    }
+  };
+
+
   
 
   const fetchFollowers = async () => {

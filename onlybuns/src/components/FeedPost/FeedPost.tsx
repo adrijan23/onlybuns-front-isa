@@ -23,7 +23,6 @@ interface PostProps {
         description: string;
         imagePath: string;
         user: User;
-        likeCount: number;
     };
 }
 
@@ -37,6 +36,7 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editedDescription, setEditedDescription] = useState(post.description);
+    const [likeCount, setLikeCount] = useState(0);
 
     if (!authContext) throw new Error('AuthContext is undefined!');
 
@@ -55,6 +55,7 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                 setComments([]);
             }
         };
+        fetchLikeCount();
         checkLike();
         fetchComments();
     }, [post.id]);
@@ -73,6 +74,7 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
             await axios.post(`/api/posts/${post.id}/like`, null);
             setLiked(true);
             triggerLikeAnimation(); // Show the heart animation
+            setLikeCount(likeCount + 1);
         } catch (error) {
             console.error('Error liking post: ', error);
         }
@@ -87,6 +89,16 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
         try {
             await axios.delete(`/api/posts/${post.id}/like`);
             setLiked(false);
+            setLikeCount(likeCount - 1);
+        } catch (error) {
+            console.error('Error unliking post:', error);
+        }
+    };
+
+    const fetchLikeCount = async () => {
+        try {
+            const response = await axios.get<number>(`http://localhost:8082/api/posts/${post.id}/like_count`);
+            setLikeCount(response.data);
         } catch (error) {
             console.error('Error unliking post:', error);
         }
@@ -206,6 +218,10 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                     className={styles['post-image']}
                 />
             </div>
+            
+            <div className='like-count'>
+                <span>{likeCount} likes</span>
+            </div>
 
             {/* Post Description */}
             {isEditing ? (
@@ -227,7 +243,7 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                     </p>
                 </div>
             )}
-
+        
             {/* Like and Comment Icons */}
             <div className={styles['post-bottom-bar']}>
                 <div className={styles['post-bottom-icons']}>
@@ -235,7 +251,6 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                         className={`${styles['post-icon']} ${liked ? styles['liked'] : styles['unliked']}`}
                         onClick={toggleLike}
                     />
-                    <span>{post.likeCount}</span> {/* Display like count */}
                     <FaComment className={styles['post-icon']} onClick={handleToggleComments} />
                 </div>
             </div>
