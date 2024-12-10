@@ -226,3 +226,6 @@
     box-shadow: 0 0 4px #3b82f6;
 }
 
+.like-count{
+    text-align: start;
+}
