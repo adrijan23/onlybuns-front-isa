@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import axios, {AxiosError } from 'axios';
 import { FaEllipsisH, FaHeart, FaComment } from 'react-icons/fa';
 import styles from './FeedPost.module.css';
 import { AuthContext } from '../../context/AuthContext';
@@ -129,6 +129,7 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
         }
 
         if (newComment.trim()) {
+
             try {
                 const response = await axios.post(`/api/posts/${post.id}/comments`, {
                     content: newComment,
@@ -136,8 +137,17 @@ const FeedPost: React.FC<PostProps> = ({ post }) => {
                 });
                 setComments([...comments, response.data]);
                 setNewComment('');
-            } catch (error) {
-                console.error('Error adding comment:', error);
+                
+            } catch (error: unknown) { 
+                if (axios.isAxiosError(error)) {
+                    if(error.response?.status === 429 || error.response?.status === 403) {
+                    const errorMessage = error.response?.data
+                    alert(errorMessage); 
+                    }
+                } else {
+                    console.error('Unexpected error:', error);
+                    alert('An unexpected error occurred. Please try again.');
+                }
             }
         }
     };
