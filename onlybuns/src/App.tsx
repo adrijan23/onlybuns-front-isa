@@ -13,6 +13,7 @@ import SignUpPage from './pages/SignUpPage';
 import UsersPage from './pages/UsersPage';
 import TrendsPage from './pages/TrendsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
+import ChatPage from './pages/ChatPage';
 
 const App = () => {
   return (
@@ -72,6 +73,12 @@ const App = () => {
                 <ProtectedRoute>
                   <AnalyticsPage />
                 </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat"
+              element={
+                <ChatPage />
               }
             />
           </Route>
