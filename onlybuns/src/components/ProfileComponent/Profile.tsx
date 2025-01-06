@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AuthContext } from '../../context/AuthContext';
 import axios from '../../config/axiosConfig';
 import FollowerList from '../FollowerList/FollowerList';
+import AddressMap from '../AddressMapComponent/AddressMap';
 
 interface User {
   id: number;
@@ -33,6 +34,14 @@ interface Post {
 interface PostDetails {
   likes: number;
   comments: number;
+}
+
+interface Address {
+  street: string;
+  streetNumber: string;
+  city: string;
+  latitude: number;
+  longitude: number;
 }
 
 const Profile: React.FC = () => {
@@ -68,6 +77,13 @@ const Profile: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [passwordError, setPasswordError] = useState('');
 
+  const [isAddressModalVisible, setAddressModalVisible] = useState(false);
+  const [street, setStreet] = useState('');
+  const [streetNumber, setStreetNumber] = useState('');
+  const [city, setCity] = useState('');
+  const [latitude, setLatitude] = useState<number | null>(null);
+  const [longitude, setLongitude] = useState<number | null>(null);
+
   const toggleDropdown = () => setDropdownVisible(!isDropdownVisible);
   const closeDropdown = () => setDropdownVisible(false);
 
@@ -100,6 +116,56 @@ const Profile: React.FC = () => {
       navigate('/login');
     } catch (error) {
       setPasswordError('Failed to update password. Please try again.');
+    }
+  };
+
+  const handleOpenAddressModal = () => {
+    if (userId) {
+      fetchUserAddress(userId);
+    }
+    setAddressModalVisible(true);
+  };
+
+  const fetchUserAddress = async (userId: number) => {
+    try {
+      const response = await axios.get<Address>(`http://localhost:8082/api/user/${userId}/address`);
+      const address = response.data;
+      if (address){
+        setStreet(address.street);
+        setStreetNumber(address.streetNumber);
+        setCity(address.city);
+        setLatitude(address.latitude);
+        setLongitude(address.longitude);
+      }
+    } catch (error) {
+      console.error('Failed to fetch user address:', error);
+    }
+  };
+
+  const handleCloseAddressModal = () => {
+    setAddressModalVisible(false);
+    setStreet('');
+    setStreetNumber('');
+    setCity('');
+    setLatitude(null);
+    setLongitude(null);
+  };
+
+  const handleAddressSave = async () => {
+    try {
+      const address: Address = {
+        street,
+        streetNumber,
+        city,
+        latitude: latitude!,
+        longitude: longitude!,
+      };
+
+      await axios.put(`/api/user/${userId}/update-address`, address);
+      alert('Address saved successfully!');
+      handleCloseAddressModal();
+    } catch (error) {
+      console.error('Failed to save address:', error);
     }
   };
 
@@ -350,6 +416,9 @@ const Profile: React.FC = () => {
                     <div className={styles['dropdown-item']} onClick={handleOpenPasswordModal}>
                       Edit Password
                     </div>
+                    <div className={styles['dropdown-item']} onClick={handleOpenAddressModal}>
+                      Set Address
+                    </div>
                   </div>
                 )}
               </div>
@@ -394,6 +463,54 @@ const Profile: React.FC = () => {
           </div>
         </div>
       )}
+
+      {/* Address Modal */}
+      {isAddressModalVisible && (
+        <div className={styles['popup-overlay']}>
+          <div className={styles['popup-container']}>
+            <button className={styles['close-button']} onClick={handleCloseAddressModal}>
+              &times;
+            </button>
+            <h2>Set Address</h2>
+            <div className={styles['map-container']}>
+            <AddressMap
+              latitude={latitude}
+              longitude={longitude}
+              setLatitude={setLatitude}
+              setLongitude={setLongitude}
+              setStreet={setStreet}
+              setStreetNumber={setStreetNumber}
+              setCity={setCity}
+            />
+            </div>
+            <input
+              type="text"
+              placeholder="Street"
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
+              className={styles['input-field']}
+            />
+            <input
+              type="text"
+              placeholder="Street Number"
+              value={streetNumber}
+              onChange={(e) => setStreetNumber(e.target.value)}
+              className={styles['input-field']}
+            />
+            <input
+              type="text"
+              placeholder="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              className={styles['input-field']}
+            />
+            <button className={styles['save-button']} onClick={handleAddressSave}>
+              Save
+            </button>
+          </div>
+        </div>
+      )}
+
 
       {/* Popup for Followers */}
       {isFollowersPopupVisible && (
