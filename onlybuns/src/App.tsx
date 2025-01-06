@@ -12,6 +12,7 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import UsersPage from './pages/UsersPage';
 import TrendsPage from './pages/TrendsPage';
+import NearbyMapPage from './pages/NearbyMapPage';
 
 const App = () => {
   return (
@@ -55,6 +56,14 @@ const App = () => {
                       element={
                         <ProtectedRoute>
                           <TrendsPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/nearby"
+                      element={
+                        <ProtectedRoute>
+                          <NearbyMapPage />
                         </ProtectedRoute>
                       }
                     />
