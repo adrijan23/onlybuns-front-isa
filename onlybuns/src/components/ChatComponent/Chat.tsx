@@ -30,6 +30,8 @@ const Chat: React.FC = () => {
     if (!authContext) throw new Error('AuthContext is undefined!');
     const { auth } = authContext;
     const userId = auth.user?.id;
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(true);
 
     // Establish WebSocket connection and subscribe to topic on mount
     useEffect(() => {
@@ -71,16 +73,32 @@ const Chat: React.FC = () => {
         if (!userId) return;
         const fetchUsers = async () => {
             try {
+                setLoading(true);
                 const response = await axios.get<User[]>(`http://localhost:8082/api/${userId}/following`);
                 console.log(response.data);
                 setAllUsers(response.data);
             } catch (error) {
                 console.error('Error fetching users:', error);
+            } finally {
+                setLoading(false);
             }
         };
 
         fetchUsers();
+        getLastTenMessages();
     }, [userId]);
+
+    const getLastTenMessages = async () => {
+        try {
+            const response = await axios.get(`/api/chat/messages/${roomId}/${userId}`);
+            var responseData = response.data;
+            // responseData = responseData.reverse();
+            setMessages(responseData);
+        } catch (err) {
+            console.error('Error fetching old messages:', err);
+            setError('Failed to fetch old messages.');
+        }
+    }
 
     // Handle incoming messages
     const onMessageReceived = (message: Message) => {
@@ -131,6 +149,14 @@ const Chat: React.FC = () => {
     const handleUserSelect = (event: SelectChangeEvent<number>) => {
         setSelectedUserId(Number(event.target.value));
     };
+
+    if (loading) {
+        return <p>Loading chat...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
 
     return (
         <div>
