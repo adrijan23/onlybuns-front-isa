@@ -82,7 +82,7 @@ const App = () => {
               }
             />
             <Route
-              path="/chat/:roomId"
+              path="/chat/:roomId/:roomName"
               element={
                 <ChatPage />
               }

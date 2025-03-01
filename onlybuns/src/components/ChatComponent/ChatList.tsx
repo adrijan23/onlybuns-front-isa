@@ -36,8 +36,8 @@ const ChatList: React.FC = () => {
     }, [userId]);
 
     // Handle clicking on a chat room, updating the URL with the roomId
-    const handleChatRoomClick = (roomId: string) => {
-        navigate(`/chat/${roomId}`); // Update the URL to reflect the selected chat room
+    const handleChatRoomClick = (roomId: string, roomName: string) => {
+        navigate(`/chat/${roomId}/${roomName}`); // Update the URL to reflect the selected chat room
     };
 
     // Handle opening the dialog to create a new room
@@ -76,7 +76,7 @@ const ChatList: React.FC = () => {
                     <ListItem
                         component="div"
                         key={chatRoom.id}
-                        onClick={() => handleChatRoomClick(chatRoom.id)}
+                        onClick={() => handleChatRoomClick(chatRoom.id, chatRoom.name)}
                         style={{ cursor: 'pointer' }}
                     >
                         <ListItemText

@@ -1,12 +1,23 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Client, Message } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import axios from '../../config/axiosConfig';
 import { useParams } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
-import {
-    List, ListItem, ListItemText, Avatar, Typography, TextField, Button, Select, MenuItem, FormControl, InputLabel, SelectChangeEvent
-} from '@mui/material';
+import { AuthContext } from '../../context/AuthContext'; import {
+    Avatar,
+    Button,
+    TextField,
+    List,
+    ListItem,
+    ListItemAvatar,
+    ListItemText,
+    Typography,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    type SelectChangeEvent,
+} from "@mui/material"
 
 interface ChatMessage {
     username: string;
@@ -20,6 +31,7 @@ interface User {
 
 const Chat: React.FC = () => {
     const { roomId } = useParams<{ roomId: string }>();
+    const { roomName } = useParams<{ roomName: string }>();
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [client, setClient] = useState<Client | null>(null);
@@ -32,6 +44,8 @@ const Chat: React.FC = () => {
     const userId = auth.user?.id;
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const messagesContainerRef = useRef<HTMLDivElement | null>(null);
 
     // Establish WebSocket connection and subscribe to topic on mount
     useEffect(() => {
@@ -85,10 +99,20 @@ const Chat: React.FC = () => {
         };
 
         fetchUsers();
-        getLastTenMessages();
     }, [userId]);
 
-    const getLastTenMessages = async () => {
+    useEffect(() => {
+        if (messagesContainerRef.current) {
+            messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+        }
+    }, []);
+    useEffect(() => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+        }
+    }, [messages]);
+
+    const getLastMessages = async () => {
         try {
             const response = await axios.get(`/api/chat/messages/${roomId}/${userId}`);
             var responseData = response.data;
@@ -99,6 +123,11 @@ const Chat: React.FC = () => {
             setError('Failed to fetch old messages.');
         }
     }
+
+    useEffect(() => {
+        setMessages([]);
+        getLastMessages();
+    }, [roomId]);
 
     // Handle incoming messages
     const onMessageReceived = (message: Message) => {
@@ -146,7 +175,7 @@ const Chat: React.FC = () => {
         setMessage(event.target.value);
     };
 
-    const handleUserSelect = (event: SelectChangeEvent<number>) => {
+    const handleUserSelect = (event: SelectChangeEvent<string>) => {
         setSelectedUserId(Number(event.target.value));
     };
 
@@ -159,61 +188,85 @@ const Chat: React.FC = () => {
     }
 
     return (
-        <div>
-            <List>
-                {messages.map((msg, index) => (
-                    <ListItem key={index}>
-                        <Avatar>{msg.username.charAt(0)}</Avatar>
-                        <ListItemText
-                            primary={<Typography variant="subtitle1" gutterBottom>{msg.username}</Typography>}
-                            secondary={msg.content}
-                        />
-                    </ListItem>
-                ))}
-            </List>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                <TextField
-                    id="standard-basic"
-                    label="Message"
-                    variant="standard"
-                    value={message}
-                    onChange={handleInputChange}
-                />
-                <Button
-                    variant="contained"
-                    onClick={handleSendMessage}
-                    disabled={!message.trim()}
-                >
-                    Send
-                </Button>
+        <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
+            {/* Room name header */}
+            <Typography variant="h6" style={{ padding: "16px" }}>
+                {roomName}
+            </Typography>
+
+            {/* Scrollable message list */}
+            <div
+                ref={messagesContainerRef}
+                style={{ height: "40%", overflowY: "auto", padding: "0 16px", marginBottom: "16px" }}
+            >
+                {messages.length === 0 ? <p>No messages yet</p> :
+                    <List>
+                        {messages.map((msg, index) => (
+                            <ListItem key={index}>
+                                <ListItemAvatar>
+                                    <Avatar>{msg.username.charAt(0)}</Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={<Typography variant="subtitle1">{msg.username == username ? "You" : msg.username}</Typography>}
+                                    secondary={msg.content}
+                                />
+                            </ListItem>
+                        ))}
+                        {/* This div will ensure we scroll to the bottom */}
+                        <div ref={messagesEndRef} />
+                    </List>
+                }
             </div>
 
-            {/* Dropdown for selecting a user */}
-            <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center' }}>
-                <FormControl variant="outlined" fullWidth>
-                    <InputLabel id="user-select-label">Select User</InputLabel>
-                    <Select
-                        labelId="user-select-label"
-                        id="user-select"
-                        value={selectedUserId !== null ? selectedUserId : ""}
-                        onChange={handleUserSelect}
-                        label="Select User"
+            {/* Fixed bottom bar for message input and user selection */}
+            <div style={{ borderTop: "1px solid #ddd", padding: "16px", position: "sticky", bottom: 0, background: "#fff", width: "100%" }}>
+                {/* Message input and send button */}
+                <div style={{ display: "flex", marginBottom: "16px" }}>
+                    <TextField
+                        fullWidth
+                        variant="outlined"
+                        value={message}
+                        onChange={handleInputChange}
+                        placeholder="Type your message..."
+                        onKeyPress={(e) => {
+                            if (e.key === "Enter" && !e.shiftKey) {
+                                e.preventDefault();
+                                handleSendMessage();
+                            }
+                        }}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleSendMessage}
+                        disabled={!message.trim()}
+                        style={{ marginLeft: "8px" }}
                     >
-                        {allUsers.map((user) => (
-                            <MenuItem key={user.id} value={user.id}>
-                                {user.username}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                <Button
-                    variant="contained"
-                    onClick={handleAddUser}
-                    disabled={!selectedUserId}
-                    style={{ marginLeft: '10px' }}
-                >
-                    Add User to Room
-                </Button>
+                        Send
+                    </Button>
+                </div>
+
+                {/* User selection */}
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <FormControl variant="outlined" fullWidth style={{ marginRight: "8px" }}>
+                        <InputLabel id="user-select-label">Select User</InputLabel>
+                        <Select
+                            labelId="user-select-label"
+                            value={selectedUserId ? String(selectedUserId) : ''}
+                            onChange={handleUserSelect}
+                            label="Select User"
+                        >
+                            {allUsers.map((user) => (
+                                <MenuItem key={user.id} value={user.id}>
+                                    {user.username}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <Button variant="contained" color="primary" onClick={handleAddUser} disabled={!selectedUserId}>
+                        Add User to Room
+                    </Button>
+                </div>
             </div>
         </div>
     );

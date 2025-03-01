@@ -8,7 +8,7 @@ const ChatPage: React.FC = () => {
     const { roomId } = useParams<{ roomId: string }>(); // Get roomId from URL params
 
     return (
-        <Grid container>
+        <Grid container style={{ height: '700px' }}>
             {/* Chat List on the left (takes 3/12 of the screen) */}
             <Grid item xs={3} style={{ borderRight: '1px solid #ddd' }}>
                 <ChatList />
