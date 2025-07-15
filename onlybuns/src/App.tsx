@@ -12,53 +12,83 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import UsersPage from './pages/UsersPage';
 import TrendsPage from './pages/TrendsPage';
+import AnalyticsPage from './pages/AnalyticsPage';
+import ChatPage from './pages/ChatPage';
 import NearbyMapPage from './pages/NearbyMapPage';
 
 const App = () => {
   return (
     <AuthProvider>
-        <Router>
-            <Routes>
-                <Route path="/" element={<Layout />} >
-                    <Route index element={<HomePage />} />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Layout />} >
+            <Route index element={<HomePage />} />
 
-                    <Route path="/login" element={<LoginPage />} />
-                    <Route path="/signup" element={<SignUpPage />} />
-                    <Route path="/activate" element={<ActivateAccount />} />
-                    <Route path="/admin/users" element={<UsersPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/activate" element={<ActivateAccount />} />
 
-                    <Route
-                        path="/createpost"
-                        element={
-                            <ProtectedRoute>
-                                <CreatePost/>
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="/profile/:id"
-                        element={
-                            <ProtectedRoute>
-                                <ProfilePage />
-                            </ProtectedRoute>
-                        }
-                    />
-                    <Route
-                      path="/post/:id"
-                      element={
-                        <ProtectedRoute>
-                          <PostPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/trends"
-                      element={
-                        <ProtectedRoute>
-                          <TrendsPage />
-                        </ProtectedRoute>
-                      }
-                    />
+            <Route
+              path="/createpost"
+              element={
+                <ProtectedRoute>
+                  <CreatePost />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/:id"
+              element={
+                <ProtectedRoute>
+                  <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/post/:id"
+              element={
+                <ProtectedRoute>
+                  <PostPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trends"
+              element={
+                <ProtectedRoute>
+                  <TrendsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute>
+                  <UsersPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/analytics"
+              element={
+                <ProtectedRoute>
+                  <AnalyticsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/chat"
+              element={
+                <ChatPage />
+              }
+            />
+            <Route
+              path="/chat/:roomId/:roomName"
+              element={
+                <ChatPage />
+              }
+            />
+          </Route>
                     <Route
                       path="/nearby"
                       element={

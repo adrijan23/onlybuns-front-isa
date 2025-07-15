@@ -61,6 +61,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             const { accessToken } = response.data;
 
             localStorage.setItem('token', accessToken);
+            localStorage.setItem('username', username);
             axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
             await fetchUser(accessToken);
@@ -78,6 +79,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
     const logout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('username');
         delete axios.defaults.headers.common['Authorization'];
         setAuth({ accessToken: null, user: null, loading: false });
     };
