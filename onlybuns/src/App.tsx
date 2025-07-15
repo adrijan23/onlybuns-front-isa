@@ -14,6 +14,7 @@ import UsersPage from './pages/UsersPage';
 import TrendsPage from './pages/TrendsPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import ChatPage from './pages/ChatPage';
+import NearbyMapPage from './pages/NearbyMapPage';
 
 const App = () => {
   return (
@@ -88,8 +89,17 @@ const App = () => {
               }
             />
           </Route>
-        </Routes>
-      </Router>
+                    <Route
+                      path="/nearby"
+                      element={
+                        <ProtectedRoute>
+                          <NearbyMapPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                </Route>
+            </Routes>
+        </Router>
     </AuthProvider>
   );
 };
