@@ -88,18 +88,17 @@ const App = () => {
                 <ChatPage />
               }
             />
+            <Route
+              path="/nearby"
+              element={
+                <ProtectedRoute>
+                  <NearbyMapPage />
+                </ProtectedRoute>
+              }
+            />
           </Route>
-                    <Route
-                      path="/nearby"
-                      element={
-                        <ProtectedRoute>
-                          <NearbyMapPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                </Route>
-            </Routes>
-        </Router>
+        </Routes>
+      </Router>
     </AuthProvider>
   );
 };

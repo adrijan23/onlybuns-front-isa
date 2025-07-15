@@ -25,6 +25,9 @@ const Navbar = () => {
             {auth.user.roles?.some(role => role.name === "ROLE_ADMIN") && (
               <Link to="/admin/users" className={styles.link}>Users</Link>
             )}
+            {auth.user.roles?.some(role => role.name === "ROLE_ADMIN") && (
+              <Link to="/analytics" className={styles.link}>Analytics</Link>
+            )}
 
             {/* Logout button */}
             <button className={styles.link} onClick={logout}>Logout</button>
