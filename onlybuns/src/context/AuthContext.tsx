@@ -76,11 +76,23 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
         }
     };
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        delete axios.defaults.headers.common['Authorization'];
-        setAuth({ accessToken: null, user: null, loading: false });
-    };
+    const logout = async () => {
+    try {
+        // Call backend logout to update metrics
+        await axios.post('/auth/logout');
+    } catch (err) {
+        console.warn('Logout request failed (maybe already logged out):', err);
+        // still proceed with local logout
+    }
+
+    // Clear token on client
+    localStorage.removeItem('token');
+    delete axios.defaults.headers.common['Authorization'];
+
+    // Reset auth state
+    setAuth({ accessToken: null, user: null, loading: false });
+};
+
 
     return (
         <AuthContext.Provider value={{ auth, login, logout }}>
