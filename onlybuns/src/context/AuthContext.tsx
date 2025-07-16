@@ -87,6 +87,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
 
     // Clear token on client
     localStorage.removeItem('token');
+    localStorage.removeItem('username')
     delete axios.defaults.headers.common['Authorization'];
 
     // Reset auth state
