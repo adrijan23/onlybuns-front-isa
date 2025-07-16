@@ -61,6 +61,7 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             const { accessToken } = response.data;
 
             localStorage.setItem('token', accessToken);
+            localStorage.setItem('username', username);
             axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
             await fetchUser(accessToken);
@@ -75,7 +76,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             }
         }
     };
-
     const logout = async () => {
     try {
         // Call backend logout to update metrics
@@ -93,7 +93,6 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
     // Reset auth state
     setAuth({ accessToken: null, user: null, loading: false });
 };
-
 
     return (
         <AuthContext.Provider value={{ auth, login, logout }}>

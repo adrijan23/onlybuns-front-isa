@@ -18,10 +18,15 @@ const Navbar = () => {
         {auth.user ? (
           <>
             <Link to={"/trends"} className={styles.link}>Trends</Link>
+            <Link to={"/nearby"} className={styles.link}>Nearby</Link>
             <Link to={`/profile/${auth.user.id}`} className={styles.link}>Profile</Link>
+            <Link to="/chat" className={styles.link}>Chat</Link>
             <Link to="/createpost" className={styles.link}>Create Post</Link>
             {auth.user.roles?.some(role => role.name === "ROLE_ADMIN") && (
               <Link to="/admin/users" className={styles.link}>Users</Link>
+            )}
+            {auth.user.roles?.some(role => role.name === "ROLE_ADMIN") && (
+              <Link to="/analytics" className={styles.link}>Analytics</Link>
             )}
 
             {/* Logout button */}
