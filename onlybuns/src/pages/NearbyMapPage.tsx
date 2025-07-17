@@ -11,6 +11,13 @@ interface Address {
     longitude: number;
 }
 
+interface BunnyCare {
+    id: number;
+    name: string;
+    latitude: number;
+    longitude: number;
+}
+
 const NearbyMapPage: React.FC = () => {
     const authContext = useContext(AuthContext);
     if (!authContext) throw new Error('AuthContext is undefined!');
@@ -20,6 +27,7 @@ const NearbyMapPage: React.FC = () => {
     const [posts, setPosts] = useState([]);
     const [address, setAddress] = useState<Address | null>(null);
     const [isAddressLoaded, setIsAddressLoaded] = useState<boolean>(false);
+    const [bunnyCareLocations, setBunnyCareLocations] = useState<Array<BunnyCare>>([]);
 
     useEffect(() => {
         const fetchUserAddress = async () => {
@@ -45,9 +53,19 @@ const NearbyMapPage: React.FC = () => {
             }
         };
 
+        const fetchBunnyCareLocations = async () => {
+            try {
+                const response = await axios.get('/api/care-locations');
+                setBunnyCareLocations(response.data);
+            } catch (error) {
+                console.error('Error fetching Bunny Care locations:', error);
+            }
+        };
+
         if (userId) {
             fetchUserAddress();
             fetchPosts();
+            fetchBunnyCareLocations();
         }
     }, [userId]);
 
@@ -70,6 +88,7 @@ const NearbyMapPage: React.FC = () => {
                     setLongitude={(lng) =>
                         setAddress((prev) => (prev ? { ...prev, longitude: lng } : null))
                     }
+                    bunnyCareLocations={bunnyCareLocations}
                 />
             )}
         </div>
