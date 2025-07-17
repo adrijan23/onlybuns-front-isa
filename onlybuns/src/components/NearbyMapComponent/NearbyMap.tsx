@@ -7,8 +7,8 @@ import style from './NearbyMap.module.css';
 // Fix Leaflet marker icon issues
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import postIconImage from '../../icons/rabbit-i.png'; // Import your custom post icon image
-import FeedPost from '../FeedPost/FeedPost';
+import postIconImage from '../../icons/rabbit-i.png'; 
+import careIconImage from '../../icons/bunny-care.png'; 
 import PostImage from '../PostImageComponent/PostImage';
 
 L.Marker.prototype.options.icon = L.icon({
@@ -18,9 +18,17 @@ L.Marker.prototype.options.icon = L.icon({
 
 const postIcon = L.icon({
     iconUrl: postIconImage,
-    iconSize: [35, 35], // Adjust the size as needed
-    iconAnchor: [12, 41], // Adjust the anchor as needed
-    popupAnchor: [1, -34], // Adjust the popup anchor as needed
+    iconSize: [35, 35], 
+    iconAnchor: [12, 41], 
+    popupAnchor: [1, -34], 
+    shadowUrl: iconShadow,
+});
+
+const careIcon = L.icon({
+    iconUrl: careIconImage,
+    iconSize: [60, 60], 
+    iconAnchor: [12, 41], 
+    popupAnchor: [1, -34], 
     shadowUrl: iconShadow,
 });
 
@@ -47,15 +55,23 @@ interface Post {
     user: User;
 }
 
+interface BunnyCare {
+    id: number;
+    name: string;
+    latitude: number;
+    longitude: number;
+}
+
 interface NearbyMapProps {
     latitude: number | null;
     longitude: number | null;
     posts: Post[];
     setLatitude: (lat: number) => void;
     setLongitude: (lng: number) => void;
+    bunnyCareLocations: BunnyCare[];
 }
 
-const NearbyMap: React.FC<NearbyMapProps> = ({ latitude, longitude, posts, setLatitude, setLongitude }) => {
+const NearbyMap: React.FC<NearbyMapProps> = ({ latitude, longitude, posts, setLatitude, setLongitude, bunnyCareLocations }) => {
     const defaultPosition: [number, number] = latitude && longitude
         ? [latitude, longitude]
         : [51.505, -0.09]; // Default to London coordinates
@@ -86,6 +102,13 @@ const NearbyMap: React.FC<NearbyMapProps> = ({ latitude, longitude, posts, setLa
                 <Marker key={post.id} position={[post.latitude, post.longitude]} icon={postIcon}>
                     <Popup>    
                         <PostImage imagePath={post.imagePath} postId={post.id} />
+                    </Popup>
+                </Marker>
+            ))}
+            {bunnyCareLocations.map(bunnyCareLocations => (
+                <Marker key={bunnyCareLocations.id} position={[bunnyCareLocations.latitude, bunnyCareLocations.longitude]} icon={careIcon}>
+                    <Popup>    
+                        {bunnyCareLocations.name}
                     </Popup>
                 </Marker>
             ))}
