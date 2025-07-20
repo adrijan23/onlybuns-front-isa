@@ -9,8 +9,10 @@ const CommentAnalytics = () => {
     const [viewType, setViewType] = useState("yearly");
     const [selectedYear, setSelectedYear] = useState<number>(currentYear);
     const [selectedMonth, setSelectedMonth] = useState<number>(1);
+    const [selectedWeek, setSelectedWeek] = useState<number>(1);
     const [yearlyData, setYearlyData] = useState([]);
     const [monthlyData, setMonthlyData] = useState([]);
+    const [weeklyData, setWeeklyData] = useState([]);
 
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -28,10 +30,12 @@ const CommentAnalytics = () => {
     useEffect(() => {
         if (viewType === "yearly") {
             fetchYearlyData(selectedYear);
-        } else {
+        } else if (viewType === "monthly") {
             fetchMonthlyData(selectedYear, selectedMonth);
+        } else if (viewType === "weekly") {
+            fetchWeeklyData(selectedYear, selectedMonth, selectedWeek);
         }
-    }, [selectedYear, selectedMonth, viewType]);
+    }, [selectedYear, selectedMonth, selectedWeek, viewType]);
 
     const fetchAvailableYears = async () => {
         try {
@@ -83,9 +87,21 @@ const CommentAnalytics = () => {
         }
     };
 
+    const fetchWeeklyData = async (year: any, month: any, week: any) => {
+        try {
+            const response = await axios.get(`api/posts/comments/analytics/weekly?year=${year}&month=${month}&week=${week}`);
+            setWeeklyData(response.data.map((item: any[]) => ({
+                day: item[0],
+                posts: item[1]
+            })));
+        } catch (error) {
+            console.error("Error fetching weekly data:", error);
+        }
+    };
+
     return (
         <div>
-            <h2>{viewType === "yearly" ? "Yearly" : "Monthly"} Comments Analytics</h2>
+            <h2>{viewType === "yearly" ? "Yearly" : viewType === "monthly" ? "Monthly" : "Weekly"} Comments Analytics</h2>
 
             {/* Dropdown for selecting year */}
             <select
@@ -99,7 +115,7 @@ const CommentAnalytics = () => {
                 ))}
             </select>
 
-            {/* Toggle between yearly and monthly view */}
+            {/* Toggle between yearly, monthly, and weekly view */}
             <div>
                 <label>
                     <input
@@ -119,10 +135,19 @@ const CommentAnalytics = () => {
                     />
                     Monthly
                 </label>
+                <label>
+                    <input
+                        type="radio"
+                        value="weekly"
+                        checked={viewType === "weekly"}
+                        onChange={() => setViewType("weekly")}
+                    />
+                    Weekly
+                </label>
             </div>
 
-            {/* If monthly view, show dropdown for selecting the month */}
-            {viewType === "monthly" && (
+            {/* If monthly or weekly view, show dropdown for selecting the month */}
+            {(viewType === "monthly" || viewType === "weekly") && (
                 <select
                     value={selectedMonth}
                     onChange={(e) => setSelectedMonth(Number(e.target.value))}
@@ -130,6 +155,20 @@ const CommentAnalytics = () => {
                     {availableMonths.map((month) => (
                         <option key={month} value={month}>
                             {monthNames[month - 1]}
+                        </option>
+                    ))}
+                </select>
+            )}
+
+            {/* If weekly view, show dropdown for selecting the week */}
+            {viewType === "weekly" && (
+                <select
+                    value={selectedWeek}
+                    onChange={(e) => setSelectedWeek(Number(e.target.value))}
+                >
+                    {[1, 2, 3, 4, 5].map((week) => (
+                        <option key={week} value={week}>
+                            Week {week}
                         </option>
                     ))}
                 </select>
@@ -150,6 +189,17 @@ const CommentAnalytics = () => {
             {viewType === "monthly" && monthlyData.length > 0 && (
                 <LineChart width={600} height={300} data={monthlyData}>
                     <Line type="monotone" dataKey="posts" stroke="#00bfff" />
+                    <CartesianGrid stroke="#ccc" />
+                    <XAxis dataKey="day" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                </LineChart>
+            )}
+
+            {viewType === "weekly" && weeklyData.length > 0 && (
+                <LineChart width={600} height={300} data={weeklyData}>
+                    <Line type="monotone" dataKey="posts" stroke="#32cd32" />
                     <CartesianGrid stroke="#ccc" />
                     <XAxis dataKey="day" />
                     <YAxis />
