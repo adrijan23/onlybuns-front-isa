@@ -78,6 +78,7 @@ const FeedPost: React.FC<PostProps> = ({ post, onPostUpdated }) => {
 
     const { auth } = authContext;
     const userId = auth.user?.id;
+    const isAdmin = auth.user?.roles?.some(role => role.name === "ROLE_ADMIN");
 
     const navigate = useNavigate();
 
@@ -298,6 +299,16 @@ const FeedPost: React.FC<PostProps> = ({ post, onPostUpdated }) => {
         setShowMenu(false);
     };
 
+    const markPostForAds = async () => {
+        try {
+            await axios.put(`/api/posts/${post.id}/mark-for-ads`);
+            alert('Post successfully marked for ads!');
+        } catch (error) {
+            console.error('Error marking post for ads:', error);
+            alert('Failed to mark post for ads.');
+        }
+    };
+
     return (
         <div className={styles['post-container']}>
             {/* Top Bar */}
@@ -327,7 +338,7 @@ const FeedPost: React.FC<PostProps> = ({ post, onPostUpdated }) => {
                         )}
                     </div>
                 )}
-
+            
             </div>
 
             {/* Post Image with Like Animation */}
@@ -375,6 +386,17 @@ const FeedPost: React.FC<PostProps> = ({ post, onPostUpdated }) => {
                 </div>
             </div>
 
+            {/* Admin Mark for Ads Button */}
+            {isAdmin && (
+                <div className={styles['admin-actions']}>
+                    <button 
+                        onClick={markPostForAds}
+                        className={styles['mark-for-ads-button']}
+                    >
+                        Mark for Ads
+                    </button>
+                </div>
+            )}
 
             {/* Comment Section */}
             {showComments && (
