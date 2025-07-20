@@ -92,7 +92,7 @@ const CreatePost: React.FC = () => {
       // Send the request to the server
       const response = await axios.post('/api/posts', formData)
       console.log('Post created:', response.data);
-      navigate('/feed');
+      navigate('/');
     } catch (error) {
       console.error('Error creating post:', error);
     }

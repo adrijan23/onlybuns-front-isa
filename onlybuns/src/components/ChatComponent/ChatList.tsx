@@ -7,6 +7,8 @@ import { AuthContext } from '../../context/AuthContext';
 interface ChatRoom {
     id: string;
     name: string;
+    chatAdminId: string;
+    createdAt: string;
 }
 
 const ChatList: React.FC = () => {
@@ -80,7 +82,16 @@ const ChatList: React.FC = () => {
                         style={{ cursor: 'pointer' }}
                     >
                         <ListItemText
-                            primary={<Typography variant="subtitle1">{chatRoom.name}</Typography>}
+                            primary={
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                    <Typography variant="subtitle1">{chatRoom.name}</Typography>
+                                    {chatRoom.chatAdminId === String(userId) && (
+                                        <Typography variant="caption" color="primary" style={{ fontWeight: 'bold' }}>
+                                            (Admin)
+                                        </Typography>
+                                    )}
+                                </div>
+                            }
                         />
                     </ListItem>
                 ))}

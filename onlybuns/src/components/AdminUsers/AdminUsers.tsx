@@ -7,10 +7,12 @@ import { useNavigate } from "react-router-dom";
 interface User {
     id: number;
     username: string;
+    email: string;
     firstName: string;
     lastName: string;
-    email: string;
-    roles: string[];
+    followersCount: number;
+    followingCount: number;
+    postsCount: number;
 }
 
 interface Post {
@@ -33,7 +35,7 @@ const AdminUsers: React.FC = () => {
     const [minPostCount, setMinPostCount] = useState<number | null>(null);
     const [maxPostCount, setMaxPostCount] = useState<number | null>(null);
 
-    const [sortColumn, setSortColumn] = useState<"posts" | "email" | null>(null);
+    const [sortColumn, setSortColumn] = useState<"posts" | "email" | "following" | null>(null);
     const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
     const authContext = useContext(AuthContext);
@@ -145,11 +147,19 @@ const AdminUsers: React.FC = () => {
                 }
             }
 
+            if (sortColumn === "following") {
+                if (sortDirection === "asc") {
+                    return a.followingCount - b.followingCount;
+                } else {
+                    return b.followingCount - a.followingCount;
+                }
+            }
+
             return 0;
         })
     };
 
-    const handleSort = (column: "posts" | "email") => {
+    const handleSort = (column: "posts" | "email" | "following") => {
         if (sortColumn === column) {
             setSortDirection(sortDirection === "asc" ? "desc" : "asc");
         } else {
@@ -217,6 +227,11 @@ const AdminUsers: React.FC = () => {
                                 Posts {sortColumn === "posts" ? (sortDirection === "asc" ? "↑" : "↓") : ""}
                             </button>
                         </th>
+                        <th>
+                            <button onClick={() => handleSort("following")}>
+                                Following {sortColumn === "following" ? (sortDirection === "asc" ? "↑" : "↓") : ""}
+                            </button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -226,6 +241,7 @@ const AdminUsers: React.FC = () => {
                             <td>{user.lastName}</td>
                             <td>{user.email}</td>
                             <td>{userPosts[user.id]?.posts ?? 0}</td>
+                            <td>{user.followingCount}</td>
                         </tr>
                     ))}
                 </tbody>

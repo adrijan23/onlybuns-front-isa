@@ -1,12 +1,20 @@
 .post-container {
-    background-color: #ffffff; /* White background */
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    margin: 16px auto; /* Centered with spacing */
-    padding: 16px; /* Inner spacing */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
-    max-width: 600px; /* Limit width for better readability */
-    font-family: Arial, sans-serif; /* Simple font */
+    background-color: #ffffff;
+    /* White background */
+    border: 1px solid #ddd;
+    /* Light border */
+    border-radius: 8px;
+    /* Rounded corners */
+    margin: 16px auto;
+    /* Centered with spacing */
+    padding: 16px;
+    /* Inner spacing */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Soft shadow */
+    max-width: 600px;
+    /* Limit width for better readability */
+    font-family: Arial, sans-serif;
+    /* Simple font */
     min-width: 300px;
     width: 500px;
 }
@@ -26,23 +34,36 @@
 .post-author-name {
     font-weight: bold;
     font-size: 16px;
-    color: #333; /* Darker text */
+    color: #333;
+    /* Darker text */
 }
 
 .post-menu-icon {
-    color: #888; /* Grey icon */
+    color: #888;
+    /* Grey icon */
     cursor: pointer;
 }
 
 .post-image {
-    width: 100%; /* Full width */
-    height: auto; /* Maintain aspect ratio */
-    border-radius: 8px; /* Rounded corners for image */
+    width: 100%;
+    /* Full width */
+    height: auto;
+    /* Maintain aspect ratio */
+    border-radius: 8px;
+    /* Rounded corners for image */
     margin-top: 8px;
 }
+
 .post-image-container {
     position: relative;
     display: inline-block;
+}
+
+.post-location {
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
 }
 
 .like-animation {
@@ -65,6 +86,7 @@
         transform: translate(-50%, -50%) scale(0.5);
         opacity: 0.5;
     }
+
     50% {
         transform: translate(-50%, -50%) scale(2.0);
         opacity: 1;
@@ -79,7 +101,8 @@
 
 .post-post-description {
     font-size: 14px;
-    color: #555; /* Subtle text color */
+    color: #555;
+    /* Subtle text color */
     line-height: 1.6;
 }
 
@@ -99,7 +122,8 @@
     text-align: left;
     margin-top: 16px;
     padding-top: 16px;
-    border-top: 1px solid #eee; /* Separate section with a line */
+    border-top: 1px solid #eee;
+    /* Separate section with a line */
 }
 
 .post-comment-list {
@@ -137,11 +161,13 @@
 }
 
 .post-comment-input:focus {
-    border-color: #007bff; /* Blue border on focus */
+    border-color: #007bff;
+    /* Blue border on focus */
 }
 
 .post-add-comment-button {
-    background-color: #007bff; /* Primary blue button */
+    background-color: #007bff;
+    /* Primary blue button */
     color: white;
     border: none;
     border-radius: 4px;
@@ -152,25 +178,31 @@
 }
 
 .post-add-comment-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
+    /* Darker blue on hover */
 }
+
 .post-icon {
     font-size: 20px;
     margin-right: 8px;
     cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease; /* Smooth hover and color transitions */
+    transition: transform 0.2s ease, color 0.2s ease;
+    /* Smooth hover and color transitions */
 }
 
 .post-icon:hover {
-    transform: scale(1.1); /* Slightly enlarge on hover */
+    transform: scale(1.1);
+    /* Slightly enlarge on hover */
 }
 
 .liked {
-    color: #ff5757; /* Red color when liked */
+    color: #ff5757;
+    /* Red color when liked */
 }
 
 .unliked {
-    color: #888; /* Gray color when unliked */
+    color: #888;
+    /* Gray color when unliked */
 }
 
 .post-menu-container {
@@ -204,19 +236,28 @@
 
 /* Style for the entire clickable username */
 .profile-link {
-    text-decoration: none; /* Remove underline */
-    color: #3b82f6; /* Modern blue color */
-    font-weight: bold; /* Emphasize the username */
-    font-size: 1rem; /* Slightly larger text */
-    transition: all 0.3s ease; /* Smooth transition for hover effects */
+    text-decoration: none;
+    /* Remove underline */
+    color: #3b82f6;
+    /* Modern blue color */
+    font-weight: bold;
+    /* Emphasize the username */
+    font-size: 1rem;
+    /* Slightly larger text */
+    transition: all 0.3s ease;
+    /* Smooth transition for hover effects */
 }
 
 /* Hover effect for the username */
 .profile-link:hover {
-    color: #2563eb; /* Darker blue on hover */
-    text-decoration: underline; /* Add underline on hover */
-    letter-spacing: 0.5px; /* Slight animation for spacing */
-    transform: scale(1.05); /* Slight zoom effect */
+    color: #2563eb;
+    /* Darker blue on hover */
+    text-decoration: underline;
+    /* Add underline on hover */
+    letter-spacing: 0.5px;
+    /* Slight animation for spacing */
+    transform: scale(1.05);
+    /* Slight zoom effect */
 }
 
 /* Optional focus state for accessibility */
@@ -226,6 +267,191 @@
     box-shadow: 0 0 4px #3b82f6;
 }
 
-.like-count{
+.like-count {
     text-align: start;
+}
+
+/* Edit Modal Styles */
+.edit-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.edit-modal {
+    background: white;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.edit-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.edit-modal-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.edit-modal-close {
+    font-size: 20px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s ease;
+}
+
+.edit-modal-close:hover {
+    color: #333;
+}
+
+.edit-modal-content {
+    padding: 20px;
+}
+
+.edit-form-group {
+    margin-bottom: 20px;
+}
+
+.edit-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.edit-textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    resize: vertical;
+    transition: border-color 0.2s ease;
+}
+
+.edit-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+.edit-file-input {
+    width: 100%;
+    padding: 8px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.edit-file-input:hover {
+    border-color: #007bff;
+}
+
+.edit-image-preview {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.edit-preview-image {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.edit-address-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f8f9fa;
+    color: #666;
+}
+
+.edit-map-container {
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.edit-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 20px;
+    border-top: 1px solid #eee;
+    background-color: #f8f9fa;
+}
+
+.edit-cancel-button {
+    padding: 10px 20px;
+    border: 2px solid #6c757d;
+    background-color: transparent;
+    color: #6c757d;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.edit-cancel-button:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.edit-save-button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+}
+
+.edit-save-button:hover {
+    background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+    .edit-modal {
+        width: 95%;
+        max-height: 90vh;
+        margin: 20px;
+    }
+
+    .edit-modal-header,
+    .edit-modal-content,
+    .edit-modal-footer {
+        padding: 15px;
+    }
+
+    .edit-map-container {
+        height: 150px;
+    }
 }
