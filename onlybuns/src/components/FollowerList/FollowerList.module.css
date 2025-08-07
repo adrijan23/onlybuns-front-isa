@@ -1,0 +1,51 @@
+.follower-list-container {
+    max-height: 400px; /* Limit the height for scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;
+  }
+  
+  .follower-list-item {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    border-bottom: 1px solid #eaeaea;
+    transition: background-color 0.3s ease;
+  }
+  
+  .follower-list-item:last-child {
+    border-bottom: none; /* Remove border for the last item */
+  }
+  
+  .follower-list-item:hover {
+    background-color: #f1f1f1; /* Highlight the item on hover */
+  }
+  
+  .follower-link {
+    text-decoration: none; /* Remove underline */
+    color: inherit; /* Use the default text color */
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .follower-name {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+  
+  .follower-username {
+    font-size: 0.9rem;
+    color: #555; /* Lighter color for the username */
+  }
+  
+  .follower-link:hover .follower-name {
+    color: #3b82f6; /* Change color on hover */
+  }
+  
+  .follower-link:hover .follower-username {
+    color: #2563eb; /* Change color on hover */
+  }
+  

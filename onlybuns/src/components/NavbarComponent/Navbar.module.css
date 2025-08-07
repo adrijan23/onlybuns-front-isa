@@ -7,7 +7,6 @@
     color: white;
   }
 
-  
   .link {
     text-decoration: none;
     padding: 10px;
@@ -22,3 +21,21 @@
   .link:hover {
     background-color: #0056b3;
   }
+
+  /* Reset button styles to look like a link */
+button.link {
+  all: unset; /* Reset all button-specific styles */
+  padding: 10px;
+  margin: 0px 10px 0px 10px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  display: inline-block;
+  transition: background-color 0.3s;
+}
+
+button.link:hover {
+  background-color: #0056b3;
+}

@@ -2,7 +2,9 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .postsContainer {

@@ -61,20 +61,38 @@ export const AuthProvider: React.FC<Props> = ({ children }) => {
             const { accessToken } = response.data;
 
             localStorage.setItem('token', accessToken);
+            localStorage.setItem('username', username);
             axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
             await fetchUser(accessToken);
-        } catch (error) {
-            console.error('Login failed:', error);
-            throw new Error('Invalid username or password');
+        } catch (error: any) {
+            // Check if error is an Axios error
+            if (error.response) {
+                // Throw the actual error response so it can be handled in the component
+                throw error.response;
+            } else {
+                console.error('Unexpected login error:', error);
+                throw new Error('Unexpected error occurred during login');
+            }
         }
     };
+    const logout = async () => {
+    try {
+        // Call backend logout to update metrics
+        await axios.post('/auth/logout');
+    } catch (err) {
+        console.warn('Logout request failed (maybe already logged out):', err);
+        // still proceed with local logout
+    }
 
-    const logout = () => {
-        localStorage.removeItem('token');
-        delete axios.defaults.headers.common['Authorization'];
-        setAuth({ accessToken: null, user: null, loading: false });
-    };
+    // Clear token on client
+    localStorage.removeItem('token');
+    localStorage.removeItem('username')
+    delete axios.defaults.headers.common['Authorization'];
+
+    // Reset auth state
+    setAuth({ accessToken: null, user: null, loading: false });
+};
 
     return (
         <AuthContext.Provider value={{ auth, login, logout }}>
