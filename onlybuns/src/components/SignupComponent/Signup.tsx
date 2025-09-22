@@ -45,7 +45,7 @@ const Signup: React.FC = () => {
                 setTimeout(() => navigate('/login'), 2000);
             }
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Something went wrong');
+            setError(err.response?.data || 'Something went wrong');
         }
     };
 
